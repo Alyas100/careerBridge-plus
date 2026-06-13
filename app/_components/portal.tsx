@@ -613,13 +613,6 @@ export function StudentSidebar() {
         ))}
       </div>
       <div className="mt-auto flex flex-col gap-4 pt-4">
-        <button
-          type="button"
-          className="w-full py-3 px-4 bg-gradient-primary-c text-on-primary rounded-full font-label-lg text-label-lg font-bold hover:opacity-90 transition-opacity shadow-card-soft flex items-center justify-center gap-2"
-        >
-          <PortalIcon name="auto_awesome" className="text-[18px]" />
-          Upgrade to Pro
-        </button>
         <Link
           href="/"
           aria-label="Log out"
@@ -2318,6 +2311,373 @@ function ReadinessGauge({
         {showMax && (
           <span className="text-label-sm text-on-surface-variant">/ 100</span>
         )}
+      </div>
+    </div>
+  );
+}
+
+export function SkillGapsPage() {
+  const score = 87;
+  const stroke = 8;
+  const size = 80;
+  const normalizedRadius = size / 2 - stroke / 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const offset = circumference - (score / 100) * circumference;
+
+  const SKILLS_TO_CLOSE = [
+    {
+      name: "Docker",
+      progress: 8,
+      priority: "High Priority",
+      desc: "Containerization and orchestration fundamentals.",
+      resourceType: "Course",
+      resourceIcon: "menu_book",
+    },
+    {
+      name: "Node.js",
+      progress: 28,
+      priority: "High Priority",
+      desc: "Server-side JavaScript execution environment.",
+      resourceType: "Video",
+      resourceIcon: "play_circle",
+    },
+  ];
+
+  const PATH_STEPS = [
+    { label: "Foundation", sub: "Completed", done: true, active: false },
+    { label: "Core Backend", sub: "In Progress", done: false, active: true },
+    { label: "Databases", sub: "", done: false, active: false },
+    { label: "APIs", sub: "", done: false, active: false },
+  ];
+
+  const CERTIFICATIONS = [
+    { name: "AWS Cloud Practitioner", provider: "Amazon", hours: 20 },
+  ];
+
+  const STUDY_PLAN = [
+    { week: "Wk 1", topic: "Node.js Basics", status: "Next" },
+    { week: "Wk 2–3", topic: "REST API Design", status: "Queued" },
+    { week: "Wk 4", topic: "Docker Intro", status: "Queued" },
+  ];
+
+  const SKILLS_HAVE = ["Python", "SQL Basics", "Git"];
+
+  return (
+    <div className="flex-1 md:ml-sidebar-width flex flex-col min-h-screen bg-background">
+      {/* Top header with back */}
+      <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-6 bg-background/90 backdrop-blur-md border-b border-outline-variant/10">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/student/paths"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors"
+            aria-label="Go back"
+          >
+            <PortalIcon name="arrow_back" className="text-[20px]" />
+          </Link>
+          <h2 className="font-headline-sm text-headline-sm font-bold text-primary">
+            Backend Engineer
+          </h2>
+        </div>
+        <StudentHeaderActions />
+      </header>
+
+      <main className="flex-1 p-margin-desktop max-w-container-max mx-auto w-full pb-24">
+        {/* Hero card */}
+        <div className="bg-white rounded-2xl border border-outline-variant/20 p-6 mb-8 flex items-center gap-6">
+          <div className="w-14 h-14 rounded-2xl bg-[#EEEDFE] flex items-center justify-center shrink-0">
+            <PortalIcon
+              name="terminal"
+              className="text-[28px] text-secondary"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="font-bold text-[22px] text-[#26215C] leading-tight">
+              Backend Engineer
+            </h1>
+            <p className="text-sm text-on-surface-variant mt-0.5">
+              $120k – $160k &nbsp;·&nbsp; Your readiness for this path
+            </p>
+          </div>
+
+          {/* Readiness gauge */}
+          <div className="flex items-center gap-6 shrink-0">
+            <div className="relative" style={{ width: size, height: size }}>
+              <svg
+                width={size}
+                height={size}
+                className="-rotate-90"
+                aria-hidden="true"
+              >
+                <circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={normalizedRadius}
+                  fill="none"
+                  stroke="#EEEDFE"
+                  strokeWidth={stroke}
+                />
+                <circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={normalizedRadius}
+                  fill="none"
+                  stroke="#534AB7"
+                  strokeWidth={stroke}
+                  strokeDasharray={circumference}
+                  strokeDashoffset={offset}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-mono-numbers text-[20px] font-bold text-[#26215C]">
+                  {score}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-1.5 text-sm">
+              <div className="flex items-center justify-between gap-6">
+                <span className="text-on-surface-variant">Total Skills</span>
+                <span className="font-bold text-[#26215C]">7</span>
+              </div>
+              <div className="flex items-center justify-between gap-6">
+                <span className="text-on-surface-variant">Ready</span>
+                <span className="font-bold text-[#27500A]">3</span>
+              </div>
+              <div className="flex items-center justify-between gap-6">
+                <span className="text-on-surface-variant">Missing</span>
+                <span className="font-bold text-error">4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Three-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Col 1: Skills to Close */}
+          <div>
+            <h2 className="font-bold text-[16px] text-[#26215C] mb-4">
+              Skills to Close
+            </h2>
+            <div className="space-y-4">
+              {SKILLS_TO_CLOSE.map((skill) => (
+                <div
+                  key={skill.name}
+                  className="bg-white rounded-2xl border border-outline-variant/20 p-5"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="font-bold text-sm text-[#26215C]">
+                      {skill.name}
+                    </p>
+                    <span className="font-mono-numbers text-xs font-bold text-on-surface-variant">
+                      {skill.progress}%
+                    </span>
+                  </div>
+                  <span className="inline-block text-[11px] font-bold text-error bg-[#FCEBEB] px-2.5 py-0.5 rounded-full mb-3">
+                    {skill.priority}
+                  </span>
+                  <div className="w-full h-1.5 bg-[#EEEDFE] rounded-full overflow-hidden mb-3">
+                    <div
+                      className="h-full bg-[#534AB7] rounded-full"
+                      style={{ width: `${skill.progress}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-on-surface-variant mb-3 leading-relaxed">
+                    {skill.desc}
+                  </p>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 text-xs font-bold text-secondary border border-secondary/30 bg-[#EEEDFE]/50 px-3 py-1.5 rounded-full hover:bg-[#EEEDFE] transition-colors"
+                  >
+                    <PortalIcon
+                      name={skill.resourceIcon}
+                      className="text-[14px]"
+                    />
+                    {skill.resourceType}
+                  </button>
+                </div>
+              ))}
+
+              {/* Skills You Have */}
+              <div>
+                <p className="text-xs font-bold text-on-surface-variant uppercase tracking-wide mb-2">
+                  Skills You Have
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {SKILLS_HAVE.map((s) => (
+                    <span
+                      key={s}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-secondary bg-[#EEEDFE] px-3 py-1.5 rounded-full"
+                    >
+                      <PortalIcon name="check_circle" className="text-[13px]" />
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Col 2: Path Progress + Certifications */}
+          <div className="space-y-6">
+            <div>
+              <h2 className="font-bold text-[16px] text-[#26215C] mb-4">
+                Path Progress
+              </h2>
+              <div className="bg-white rounded-2xl border border-outline-variant/20 p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-on-surface-variant">
+                    Overall Completion
+                  </span>
+                  <span className="font-mono-numbers text-[20px] font-bold text-[#26215C]">
+                    42%
+                  </span>
+                </div>
+                <div className="w-full h-2 bg-[#EEEDFE] rounded-full overflow-hidden mb-6">
+                  <div
+                    className="h-full bg-[#534AB7] rounded-full"
+                    style={{ width: "42%" }}
+                  />
+                </div>
+
+                {/* Step tracker */}
+                <div className="relative space-y-0">
+                  <div className="absolute left-[15px] top-4 bottom-4 w-px bg-outline-variant/30" />
+                  {PATH_STEPS.map((step, i) => (
+                    <div
+                      key={step.label}
+                      className="flex items-start gap-4 pb-5 last:pb-0 relative z-10"
+                    >
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                          step.done
+                            ? "bg-secondary text-on-primary"
+                            : step.active
+                              ? "bg-white border-2 border-secondary"
+                              : "bg-surface-container border border-outline-variant/30"
+                        }`}
+                      >
+                        {step.done ? (
+                          <PortalIcon
+                            name="check"
+                            className="text-[14px] text-white"
+                          />
+                        ) : step.active ? (
+                          <div className="w-3 h-3 rounded-full bg-secondary" />
+                        ) : (
+                          <div className="w-2.5 h-2.5 rounded-full bg-outline-variant/40" />
+                        )}
+                      </div>
+                      <div className="pt-1">
+                        <p
+                          className={`text-sm font-bold ${step.active ? "text-secondary" : step.done ? "text-[#26215C]" : "text-on-surface-variant"}`}
+                        >
+                          {step.label}
+                        </p>
+                        {step.sub && (
+                          <p className="text-xs text-on-surface-variant mt-0.5">
+                            {step.sub}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="font-bold text-[16px] text-[#26215C] mb-4">
+                Certifications
+              </h2>
+              {CERTIFICATIONS.map((cert) => (
+                <div
+                  key={cert.name}
+                  className="bg-white rounded-2xl border border-outline-variant/20 p-5 flex items-center justify-between gap-4"
+                >
+                  <div>
+                    <p className="font-bold text-sm text-[#26215C]">
+                      {cert.name}
+                    </p>
+                    <p className="text-xs text-on-surface-variant mt-1">
+                      {cert.provider} &nbsp;·&nbsp; {cert.hours} hrs
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded-full border border-secondary text-secondary text-xs font-bold hover:bg-[#EEEDFE] transition-colors shrink-0"
+                  >
+                    Start
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 3: Insights & Plan */}
+          <div className="space-y-5">
+            <h2 className="font-bold text-[16px] text-[#26215C]">
+              Insights &amp; Plan
+            </h2>
+
+            {/* Why this path */}
+            <div className="bg-white rounded-2xl border border-outline-variant/20 p-5">
+              <div className="flex items-start justify-between mb-3">
+                <h3 className="font-bold text-sm text-[#26215C]">
+                  Why Backend Engineer?
+                </h3>
+                <PortalIcon
+                  name="auto_awesome"
+                  className="text-[16px] text-secondary shrink-0"
+                />
+              </div>
+              <p className="text-xs text-on-surface-variant leading-relaxed">
+                Based on your strong foundations in Python and SQL, migrating to
+                a Backend role leverages 60% of your current skills. The market
+                demand in your area shows a 24% year-over-year growth for this
+                specific tech stack.
+              </p>
+            </div>
+
+            {/* Suggested Study Plan */}
+            <div className="bg-white rounded-2xl border border-outline-variant/20 p-5">
+              <h3 className="font-bold text-sm text-[#26215C] mb-4">
+                Suggested Study Plan
+              </h3>
+              <div className="space-y-3">
+                {STUDY_PLAN.map((item) => (
+                  <div key={item.topic} className="flex items-center gap-3">
+                    <span className="text-[11px] font-bold text-on-surface-variant w-10 shrink-0">
+                      {item.week}
+                    </span>
+                    <span className="text-sm text-[#26215C] flex-1 font-medium">
+                      {item.topic}
+                    </span>
+                    <span
+                      className={`text-[11px] font-bold px-2.5 py-1 rounded-full shrink-0 ${
+                        item.status === "Next"
+                          ? "bg-[#26215C] text-white"
+                          : "bg-surface-container text-on-surface-variant"
+                      }`}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Fixed CTA */}
+      <div className="fixed bottom-0 left-0 md:left-[var(--sidebar-width,256px)] right-0 bg-white/90 backdrop-blur-md border-t border-outline-variant/10 py-4 px-6 flex justify-end">
+        <Link
+          href="/student/paths"
+          className="flex items-center gap-2 px-8 py-3 bg-[#26215C] hover:bg-[#534AB7] text-white text-sm font-bold rounded-full transition-colors"
+        >
+          Start Learning Path
+          <PortalIcon name="arrow_forward" className="text-[16px]" />
+        </Link>
       </div>
     </div>
   );
