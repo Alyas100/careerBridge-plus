@@ -273,23 +273,13 @@ export function EmployerSidebar() {
           <PortalIcon name="settings" filled={pathname === "/employer/settings"} />
           <span className="font-body-md text-body-md">Settings</span>
         </Link>
-        <div className="mt-4 p-3 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-lg overflow-hidden">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8A5X2V29ZnAjMx6jY1cLmzENQwqDQl_hd4pF05SXqEMrgaVxBKkzWQFs6BBxvxlfWT7A3vkTk-devkbQN1yrMw0MGpaW4C9A1yK0JL2qnk64hAqWeoPIWOV_2zLmwz5DHXdhxpxl150_UMdOny4m-ce2Fkq-_3E2PLnQMc6Rkz46IbFewmuI1Jo50wrJkoEll_c3roaNUAvCNbG2syeai8sSXrUdwPgNzUYZNKZgutz34zQab0taRwtSF-Je9tS-30Xrrbp_pwr0"
-              className="w-full h-full object-cover"
-              alt="Sarah Connor"
-            />
-          </div>
-          <div>
-            <p className="font-label-lg text-label-lg text-on-surface">
-              Sarah Connor
-            </p>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">
-              Lead Recruiter
-            </p>
-          </div>
-        </div>
+        <Link
+          href="/"
+          className="mt-4 p-3 rounded-xl flex items-center gap-3 transition-colors w-full text-left text-on-surface-variant hover:bg-surface-container-high hover:text-error"
+        >
+          <PortalIcon name="logout" />
+          <span className="font-body-md text-body-md">Log Out</span>
+        </Link>
       </div>
     </nav>
   );
