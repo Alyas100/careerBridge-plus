@@ -211,6 +211,8 @@ export function EmployerSidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
+  const activeIndex = employerMenuItems.findIndex((item) => item.path === pathname);
+
   return (
     <nav className="hidden md:flex flex-col h-screen p-4 border-r border-outline-variant/20 bg-surface-container-low fixed left-0 top-0 w-sidebar-width z-40">
       <div
@@ -230,26 +232,47 @@ export function EmployerSidebar() {
       >
         <PortalIcon name="add" /> New Opening
       </Link>
-      <div className="flex-1 space-y-1">
-        {employerMenuItems.map((item) => (
-          <Link
-            key={item.path}
-            href={item.path}
-            className={`p-3 rounded-xl flex items-center gap-3 transition-all ${pathname === item.path ? "bg-secondary-fixed border-l-[3px] border-secondary text-primary font-bold" : "text-on-surface-variant hover:bg-surface-container-high"}`}
-          >
-            <PortalIcon name={item.icon} filled={pathname === item.path} />
-            <span className="font-body-md text-body-md">{item.label}</span>
-          </Link>
-        ))}
+      <div className="flex-1 relative space-y-1">
+        {/* Smooth sliding active tab indicator */}
+        {activeIndex !== -1 && (
+          <div
+            className="absolute left-0 right-0 bg-secondary-fixed border-l-[3px] border-secondary rounded-xl transition-all duration-500 ease-in-out pointer-events-none"
+            style={{
+              height: "48px",
+              top: `${activeIndex * 52}px`,
+            }}
+          />
+        )}
+        {employerMenuItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`relative z-10 p-3 h-12 rounded-xl flex items-center gap-3 transition-colors duration-500 ${
+                isActive
+                  ? "text-primary font-bold"
+                  : "text-on-surface-variant hover:bg-surface-container-high/40"
+              }`}
+            >
+              <PortalIcon name={item.icon} filled={isActive} />
+              <span className="font-body-md text-body-md">{item.label}</span>
+            </Link>
+          );
+        })}
       </div>
       <div className="mt-auto space-y-1 pt-4 border-t border-outline-variant/20">
-        <button
-          type="button"
-          className="text-on-surface-variant p-3 rounded-xl flex items-center gap-3 hover:bg-surface-container-high transition-colors w-full text-left"
+        <Link
+          href="/employer/settings"
+          className={`p-3 rounded-xl flex items-center gap-3 transition-colors w-full text-left ${
+            pathname === "/employer/settings"
+              ? "bg-secondary-fixed border-l-[3px] border-secondary text-primary font-bold"
+              : "text-on-surface-variant hover:bg-surface-container-high"
+          }`}
         >
-          <PortalIcon name="settings" />
+          <PortalIcon name="settings" filled={pathname === "/employer/settings"} />
           <span className="font-body-md text-body-md">Settings</span>
-        </button>
+        </Link>
         <div className="mt-4 p-3 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-lg overflow-hidden">
             <img
@@ -283,7 +306,7 @@ const INTERVIEW_NAV = [
 type InterviewTab = (typeof INTERVIEW_NAV)[number]["key"];
 
 export function InterviewsPage() {
-  const [activeTab, setActiveTab] = useState<InterviewTab>("evaluation");
+  const [activeTab, setActiveTab] = useState<InterviewTab>("overview");
 
   const SCORE_CARDS = [
     { label: "Technical Setup", value: 92 },
@@ -314,7 +337,7 @@ export function InterviewsPage() {
       <div className="bg-[#26215C] px-8 py-5 flex items-center justify-between">
         <div>
           <h1 className="text-[22px] font-bold text-white leading-tight">
-            Danial Razif
+            Sarah Connor
           </h1>
           <p className="text-sm text-white/70 mt-0.5">
             Senior Frontend Engineer Role
@@ -343,7 +366,7 @@ export function InterviewsPage() {
                 onClick={() => setActiveTab(item.key)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all text-left ${
                   activeTab === item.key
-                    ? "bg-[#EEEDFE] text-[#26215C]"
+                    ? "bg-[#EEEDFE] text-[#26215C] animate-tab-indicator"
                     : "text-on-surface-variant hover:bg-surface-container-low"
                 }`}
               >
@@ -386,7 +409,335 @@ export function InterviewsPage() {
 
         {/* Main content */}
         <main className="flex-1 p-6 overflow-auto pb-24">
-          <div className="max-w-5xl mx-auto">
+          <div key={activeTab} className="max-w-5xl mx-auto animate-tab-enter animate-tab-children">
+            {activeTab === "overview" && (
+              <div className="flex flex-col gap-6">
+                {/* Hero Banner */}
+                <section className="bg-gradient-hero-a rounded-xl p-card-padding flex flex-col justify-end min-h-[180px] relative overflow-hidden text-on-primary animate-fade-in">
+                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-surface-bright rounded-full mix-blend-overlay opacity-30 blur-3xl"></div>
+                  <div className="relative z-10 flex flex-col gap-2">
+                    <h2 className="font-headline-lg text-headline-lg">Sarah Connor</h2>
+                    <p className="font-title-md text-title-md flex items-center gap-2 opacity-90">
+                      <PortalIcon name="work" className="text-[20px]" />
+                      Senior Frontend Engineer Application
+                    </p>
+                  </div>
+                </section>
+
+                {/* 3-Column Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  {/* Left Column: Match Score & Summary */}
+                  <div className="lg:col-span-3 flex flex-col gap-6">
+                    {/* Match Score Card */}
+                    <div className="bg-white rounded-xl p-6 shadow-card-soft border border-surface-container-highest flex flex-col items-center text-center relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a"></div>
+                      <span className="font-label-lg text-label-lg text-on-surface-variant mb-2">AI Match Score</span>
+                      <div className="font-mono-numbers text-[57px] font-bold text-primary tracking-tight">
+                        94<span className="text-headline-sm font-normal text-on-surface-variant">%</span>
+                      </div>
+                      <div className="mt-4 bg-surface-container px-3 py-1.5 rounded-full flex items-center gap-2">
+                        <PortalIcon name="check_circle" className="text-[16px] text-secondary" filled />
+                        <span className="font-label-sm text-label-sm text-secondary">Highly Recommended</span>
+                      </div>
+                    </div>
+
+                    {/* AI Summary Card */}
+                    <div className="bg-white rounded-xl p-6 shadow-card-soft border border-surface-container-highest flex flex-col gap-3">
+                      <div className="flex items-center gap-2 text-primary">
+                        <PortalIcon name="auto_awesome" />
+                        <h3 className="font-title-md text-title-md">AI Summary</h3>
+                      </div>
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        Elena presents a strong profile aligning exceptionally well with the Senior Frontend requirements. Her deep expertise in React and modern state management, combined with architectural experience, makes her a prime candidate. Minor gap in specific CI/CD tooling requested, but core competencies are excellent.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Center Column: Skill Assessment */}
+                  <div className="lg:col-span-5 bg-white rounded-xl p-card-padding shadow-card-soft border border-surface-container-highest flex flex-col gap-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-title-lg text-title-lg text-on-surface">Skill Assessment</h3>
+                      <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded">
+                        Verified via Technical Screen
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-5">
+                      {/* React */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-end">
+                          <span className="font-label-lg text-label-lg text-on-surface font-bold">React Ecosystem</span>
+                          <span className="font-label-sm text-label-sm text-secondary">Expert (98%)</span>
+                        </div>
+                        <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-hero-a rounded-full" style={{ width: "98%" }}></div>
+                        </div>
+                      </div>
+                      {/* TypeScript */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-end">
+                          <span className="font-label-lg text-label-lg text-on-surface font-bold">TypeScript</span>
+                          <span className="font-label-sm text-label-sm text-secondary">Advanced (90%)</span>
+                        </div>
+                        <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-hero-a rounded-full" style={{ width: "90%" }}></div>
+                        </div>
+                      </div>
+                      {/* System Design */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-end">
+                          <span className="font-label-lg text-label-lg text-on-surface font-bold">Frontend System Design</span>
+                          <span className="font-label-sm text-label-sm text-secondary">Advanced (85%)</span>
+                        </div>
+                        <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-hero-a rounded-full" style={{ width: "85%" }}></div>
+                        </div>
+                      </div>
+                      {/* Testing */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-end">
+                          <span className="font-label-lg text-label-lg text-on-surface font-bold">Testing (Jest/Cypress)</span>
+                          <span className="font-label-sm text-label-sm text-outline font-bold">Intermediate (75%)</span>
+                        </div>
+                        <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-surface-tint rounded-full opacity-70" style={{ width: "75%" }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Profile Details */}
+                  <div className="lg:col-span-4 flex flex-col gap-4">
+                    <div className="bg-white rounded-xl p-card-padding shadow-card-soft border border-surface-container-highest h-full flex flex-col gap-6">
+                      <h3 className="font-title-lg text-title-lg text-on-surface">Profile Details</h3>
+                      <ul className="flex flex-col gap-5">
+                        <li className="flex gap-4 items-start">
+                          <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center shrink-0">
+                            <PortalIcon name="history" className="text-primary" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Total Experience</span>
+                            <span className="font-body-lg text-body-lg text-on-surface font-medium">8+ Years</span>
+                          </div>
+                        </li>
+                        <li className="flex gap-4 items-start">
+                          <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center shrink-0">
+                            <PortalIcon name="location_on" className="text-primary" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Location</span>
+                            <span className="font-body-lg text-body-lg text-on-surface font-medium">Austin, TX (Remote)</span>
+                          </div>
+                        </li>
+                        <li className="flex gap-4 items-start">
+                          <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center shrink-0">
+                            <PortalIcon name="payments" className="text-primary" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Salary Expectation</span>
+                            <span className="font-body-lg text-body-lg text-on-surface font-medium">$160k - $175k / yr</span>
+                            <span className="font-body-md text-body-md text-outline">Within budget range</span>
+                          </div>
+                        </li>
+                        <li className="flex gap-4 items-start">
+                          <div className="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center shrink-0">
+                            <PortalIcon name="school" className="text-primary" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase">Education</span>
+                            <span className="font-body-lg text-body-lg text-on-surface font-medium">BS Computer Science</span>
+                            <span className="font-body-md text-body-md text-outline">University of Texas</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "experience" && (
+              <div className="flex-grow overflow-y-auto timeline-scroll animate-fade-in">
+                <div className="max-w-[1000px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left Sidebar Summary */}
+                  <div className="lg:col-span-4 flex flex-col gap-6 sticky top-0">
+                    {/* Total Experience Card */}
+                    <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden group hover:shadow-card-soft transition-all duration-300">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a"></div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-title-md text-title-md text-on-surface">Total Experience</h3>
+                        <PortalIcon name="timer" className="text-secondary" />
+                      </div>
+                      <div className="flex items-end gap-2 mb-2">
+                        <span className="font-display-lg text-[57px] leading-none font-bold text-primary tracking-tight">8.5</span>
+                        <span className="font-body-md text-body-md text-on-surface-variant pb-2">Years</span>
+                      </div>
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">Consistent progression in high-growth tech environments.</p>
+                    </div>
+
+                    {/* Top Industries Card */}
+                    <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a"></div>
+                      <h3 className="font-title-md text-title-md text-on-surface mb-6">Top Industries</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex justify-between font-label-lg text-label-lg mb-2">
+                            <span className="text-on-surface">FinTech</span>
+                            <span className="text-on-surface-variant">4 yrs</span>
+                          </div>
+                          <div className="w-full bg-surface-container-high rounded-full h-2">
+                            <div className="bg-secondary h-2 rounded-full" style={{ width: "47%" }}></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between font-label-lg text-label-lg mb-2">
+                            <span className="text-on-surface">SaaS Enterprise</span>
+                            <span className="text-on-surface-variant">3 yrs</span>
+                          </div>
+                          <div className="w-full bg-surface-container-high rounded-full h-2">
+                            <div className="bg-[#ccbeff] h-2 rounded-full" style={{ width: "35%" }}></div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between font-label-lg text-label-lg mb-2">
+                            <span className="text-on-surface">E-Commerce</span>
+                            <span className="text-on-surface-variant">1.5 yrs</span>
+                          </div>
+                          <div className="w-full bg-surface-container-high rounded-full h-2">
+                            <div className="bg-outline-variant h-2 rounded-full" style={{ width: "18%" }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Skill Overlap */}
+                    <div className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/30 flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0">
+                        <PortalIcon name="auto_awesome" />
+                      </div>
+                      <div>
+                        <h4 className="font-label-lg text-label-lg text-on-surface mb-1">AI Match Insight</h4>
+                        <p className="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed font-normal">Experience aligns 94% with the Senior Frontend Engineer requisition criteria.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Timeline Content */}
+                  <div className="lg:col-span-8 relative">
+                    {/* Timeline Line */}
+                    <div className="absolute left-6 top-8 bottom-8 w-px bg-outline-variant/50"></div>
+
+                    {/* Experience Entry 1 */}
+                    <div className="relative pl-16 mb-8 group">
+                      {/* Timeline Dot */}
+                      <div className="absolute left-[21px] top-6 w-3 h-3 rounded-full bg-primary border-4 border-[#F4F2FF] shadow-sm z-10 group-hover:scale-125 transition-transform"></div>
+                      {/* Card */}
+                      <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-card-soft">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-2">
+                          <div>
+                            <h3 className="font-title-lg text-title-lg text-on-surface mb-1">Lead Frontend Architect</h3>
+                            <div className="font-title-md text-title-md text-primary">Nova Financial Systems</div>
+                          </div>
+                          <div className="font-mono-numbers text-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-lg flex-shrink-0 border border-outline-variant/30">
+                            Mar 2021 — Present
+                          </div>
+                        </div>
+                        <p className="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed">
+                          Directed end-to-end frontend strategy for a suite of enterprise FinTech applications, focusing on scalable design systems and improving complex data visualization tools.
+                        </p>
+                        <h4 className="font-label-lg text-label-lg text-on-surface mb-3 flex items-center gap-2">
+                          <PortalIcon name="star" className="text-sm text-secondary" filled />
+                          Key Achievements
+                        </h4>
+                        <ul className="space-y-3 font-body-md text-body-md text-on-surface-variant">
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-primary mt-0.5 text-[18px]" filled />
+                            <span>Spearheaded the migration to a unified React-based design system, reducing design-to-development handoff time by 40% across 5 product teams.</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-primary mt-0.5 text-[18px]" filled />
+                            <span>Redesigned the core analytics dashboard, resulting in a 22% increase in daily active user engagement and a significant drop in support tickets.</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-primary mt-0.5 text-[18px]" filled />
+                            <span>Mentored a team of 3 mid-level developers, fostering a culture of continuous feedback and user-centric problem solving.</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Experience Entry 2 */}
+                    <div className="relative pl-16 mb-8 group">
+                      {/* Timeline Dot */}
+                      <div className="absolute left-[21px] top-6 w-3 h-3 rounded-full bg-outline-variant border-4 border-[#F4F2FF] shadow-sm z-10 group-hover:bg-secondary transition-colors"></div>
+                      {/* Card */}
+                      <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-card-soft">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-2">
+                          <div>
+                            <h3 className="font-title-lg text-title-lg text-on-surface mb-1">Senior Frontend Engineer</h3>
+                            <div className="font-title-md text-title-md text-primary">CloudScale Enterprise SaaS</div>
+                          </div>
+                          <div className="font-mono-numbers text-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-lg flex-shrink-0 border border-outline-variant/30">
+                            Jan 2018 — Feb 2021
+                          </div>
+                        </div>
+                        <p className="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed">
+                          Led the user experience frontend redesign for cloud infrastructure management tools, translating complex backend operations into intuitive, accessible user interfaces in React and TypeScript.
+                        </p>
+                        <h4 className="font-label-lg text-label-lg text-on-surface mb-3 flex items-center gap-2">
+                          <PortalIcon name="star" className="text-sm text-secondary" filled />
+                          Key Achievements
+                        </h4>
+                        <ul className="space-y-3 font-body-md text-body-md text-on-surface-variant">
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-outline mt-0.5 text-[18px]" filled />
+                            <span>Conducted extensive user research with system administrators to simplify the server provisioning workflow, cutting completion time by half.</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-outline mt-0.5 text-[18px]" filled />
+                            <span>Introduced micro-interactions and progressive disclosure patterns that significantly lowered the cognitive load for new users.</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Experience Entry 3 */}
+                    <div className="relative pl-16 group">
+                      {/* Timeline Dot */}
+                      <div className="absolute left-[21px] top-6 w-3 h-3 rounded-full bg-outline-variant border-4 border-[#F4F2FF] shadow-sm z-10 group-hover:bg-secondary transition-colors"></div>
+                      {/* Card */}
+                      <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-card-soft">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-2">
+                          <div>
+                            <h3 className="font-title-lg text-title-lg text-on-surface mb-1">Frontend Developer</h3>
+                            <div className="font-title-md text-title-md text-primary">ShopCart E-Commerce</div>
+                          </div>
+                          <div className="font-mono-numbers text-sm text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-lg flex-shrink-0 border border-outline-variant/30">
+                            Jun 2016 — Dec 2017
+                          </div>
+                        </div>
+                        <p className="font-body-md text-body-md text-on-surface-variant mb-6 leading-relaxed">
+                          Collaborated with cross-functional teams to design responsive e-commerce storefronts and optimize the checkout funnel for higher conversion rates.
+                        </p>
+                        <h4 className="font-label-lg text-label-lg text-on-surface mb-3 flex items-center gap-2">
+                          <PortalIcon name="star" className="text-sm text-secondary" filled />
+                          Key Achievements
+                        </h4>
+                        <ul className="space-y-3 font-body-md text-body-md text-on-surface-variant">
+                          <li className="flex items-start gap-3">
+                            <PortalIcon name="check_circle" className="text-outline mt-0.5 text-[18px]" filled />
+                            <span>Redesigned the mobile checkout process, contributing to a 15% increase in successful mobile transactions.</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === "evaluation" && (
               <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
                 {/* Left: Overall match + score cards */}
@@ -519,7 +870,233 @@ export function InterviewsPage() {
               </div>
             )}
 
-            {activeTab !== "evaluation" && (
+            {activeTab === "insights" && (
+              <div className="flex-grow overflow-y-auto timeline-scroll animate-fade-in">
+                <div className="max-w-[1000px] mx-auto space-y-6">
+                  {/* Header Banner */}
+                  <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#26215C] to-[#534AB7] p-6 text-white">
+                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 70% 50%, #fff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+                    <div className="relative flex items-start justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <PortalIcon name="auto_awesome" className="text-[20px] text-[#ccbeff]" filled />
+                          <span className="text-xs font-bold uppercase tracking-widest text-[#ccbeff]">AI Candidate Insights</span>
+                        </div>
+                        <h2 className="font-title-lg text-title-lg font-bold mb-1">Sarah Connor</h2>
+                        <p className="text-sm text-white/70">Senior Frontend Engineer · 8.5 yrs experience</p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <div className="text-[42px] font-bold leading-none font-mono">94%</div>
+                        <div className="text-xs text-[#ccbeff] font-bold uppercase tracking-wide">Insight Score</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Two-column grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Strengths */}
+                    <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20">
+                      <div className="flex items-center gap-2 mb-5">
+                        <div className="w-8 h-8 rounded-full bg-[#EEEDFE] flex items-center justify-center">
+                          <PortalIcon name="trending_up" className="text-[18px] text-secondary" />
+                        </div>
+                        <h3 className="font-title-md text-title-md text-on-surface font-bold">Candidate Strengths</h3>
+                      </div>
+                      <div className="space-y-3">
+                        {[
+                          { title: "System Design Mastery", desc: "Demonstrated deep understanding of scalable architecture and design patterns in previous roles.", badge: "Expert" },
+                          { title: "Cross-functional Leadership", desc: "Proven ability to lead teams across engineering, design, and product boundaries.", badge: "Strong" },
+                          { title: "React Ecosystem Depth", desc: "Advanced proficiency in React, TypeScript, and state management paradigms.", badge: "Expert" },
+                          { title: "Data-Driven UX", desc: "Track record of using analytics and user research to improve engagement metrics.", badge: "Strong" },
+                        ].map((item) => (
+                          <div key={item.title} className="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low border border-outline-variant/20">
+                            <PortalIcon name="check_circle" className="text-primary text-[20px] mt-0.5 flex-shrink-0" filled />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-0.5">
+                                <p className="font-label-lg text-label-lg text-on-surface font-bold text-sm">{item.title}</p>
+                                <span className="px-2 py-0.5 rounded-full bg-[#EEEDFE] text-[#534AB7] text-[10px] font-bold uppercase">{item.badge}</span>
+                              </div>
+                              <p className="text-xs text-on-surface-variant leading-relaxed">{item.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Growth Areas */}
+                    <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20">
+                      <div className="flex items-center gap-2 mb-5">
+                        <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+                          <PortalIcon name="insights" className="text-[18px] text-amber-600" />
+                        </div>
+                        <h3 className="font-title-md text-title-md text-on-surface font-bold">Growth Opportunities</h3>
+                      </div>
+                      <div className="space-y-3">
+                        {[
+                          { title: "Backend Exposure", desc: "Limited server-side experience — may require onboarding support for full-stack tasks.", level: "Moderate" },
+                          { title: "Mobile-Native Development", desc: "Primary expertise is web-based; React Native exposure is self-reported.", level: "Minor" },
+                          { title: "DevOps Familiarity", desc: "CI/CD and deployment pipeline knowledge is entry-level based on interview responses.", level: "Minor" },
+                        ].map((item) => (
+                          <div key={item.title} className="flex items-start gap-3 p-3 rounded-xl bg-amber-50/50 border border-amber-100">
+                            <PortalIcon name="arrow_circle_up" className="text-amber-500 text-[20px] mt-0.5 flex-shrink-0" filled />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-0.5">
+                                <p className="font-label-lg text-label-lg text-on-surface font-bold text-sm">{item.title}</p>
+                                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase">{item.level}</span>
+                              </div>
+                              <p className="text-xs text-on-surface-variant leading-relaxed">{item.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personality & Communication Style */}
+                  <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20">
+                    <div className="flex items-center gap-2 mb-5">
+                      <div className="w-8 h-8 rounded-full bg-[#EEEDFE] flex items-center justify-center">
+                        <PortalIcon name="psychology" className="text-[18px] text-secondary" />
+                      </div>
+                      <h3 className="font-title-md text-title-md text-on-surface font-bold">Behavioral & Communication Profile</h3>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      {[
+                        { trait: "Communication", value: 92, color: "#534AB7" },
+                        { trait: "Collaboration", value: 88, color: "#534AB7" },
+                        { trait: "Problem Solving", value: 95, color: "#534AB7" },
+                        { trait: "Adaptability", value: 84, color: "#534AB7" },
+                      ].map((item) => (
+                        <div key={item.trait} className="flex flex-col items-center gap-3 p-4 rounded-xl bg-surface-container-low border border-outline-variant/10">
+                          <div className="relative w-16 h-16">
+                            <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
+                              <circle cx="32" cy="32" r="26" fill="none" stroke="#EEEDFE" strokeWidth="8" />
+                              <circle cx="32" cy="32" r="26" fill="none" stroke={item.color} strokeWidth="8" strokeLinecap="round"
+                                strokeDasharray={`${2 * Math.PI * 26}`}
+                                strokeDashoffset={`${2 * Math.PI * 26 * (1 - item.value / 100)}`} />
+                            </svg>
+                            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-[#26215C]">{item.value}</span>
+                          </div>
+                          <p className="text-xs font-bold text-on-surface text-center">{item.trait}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hiring Recommendation */}
+                  <div className="bg-gradient-to-r from-[#EEEDFE] to-[#F4F2FF] rounded-2xl p-6 border border-[#534AB7]/20 flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-[#534AB7] flex items-center justify-center flex-shrink-0">
+                      <PortalIcon name="recommend" className="text-white text-[20px]" filled />
+                    </div>
+                    <div>
+                      <h4 className="font-label-lg text-label-lg text-[#26215C] font-bold mb-1">AI Hiring Recommendation</h4>
+                      <p className="text-sm text-on-surface-variant leading-relaxed">
+                        Sarah Connor is a strong candidate for the Senior Frontend Engineer position. Her deep expertise in React, TypeScript, and scalable design systems directly aligns with core role requirements. The 94% insight score reflects high confidence in her technical fit and collaborative profile. <span className="font-bold text-[#26215C]">Recommend proceeding to final round.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "history" && (
+              <div className="flex-grow overflow-y-auto timeline-scroll animate-fade-in">
+                <div className="max-w-[800px] mx-auto space-y-6">
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="font-title-lg text-title-lg text-on-surface font-bold">Interview History</h2>
+                      <p className="text-sm text-on-surface-variant mt-0.5">Complete timeline of interactions with Sarah Connor</p>
+                    </div>
+                    <span className="px-3 py-1.5 rounded-full bg-[#EEEDFE] text-[#534AB7] text-xs font-bold">4 Sessions</span>
+                  </div>
+
+                  {/* Timeline */}
+                  <div className="relative">
+                    <div className="absolute left-5 top-0 bottom-0 w-px bg-outline-variant/40" />
+                    <div className="space-y-6">
+                      {[
+                        {
+                          stage: "Final Round Interview",
+                          date: "Jun 10, 2025",
+                          time: "2:00 PM – 3:30 PM",
+                          interviewer: "Sarah Chen · Engineering Director",
+                          status: "Completed",
+                          statusColor: "bg-emerald-100 text-emerald-700",
+                          dotColor: "bg-primary",
+                          notes: "Excellent system design discussion. Candidate demonstrated deep understanding of microservices and frontend architecture patterns. Strong cultural alignment observed.",
+                          tags: ["System Design", "Architecture", "Leadership"],
+                        },
+                        {
+                          stage: "Technical Assessment",
+                          date: "Jun 4, 2025",
+                          time: "10:00 AM – 11:30 AM",
+                          interviewer: "Marcus Lee · Senior Engineer",
+                          status: "Completed",
+                          statusColor: "bg-emerald-100 text-emerald-700",
+                          dotColor: "bg-secondary",
+                          notes: "Completed live coding challenge with React. Solved all 3 problems within time. Code quality and communication were both above average.",
+                          tags: ["React", "TypeScript", "Live Coding"],
+                        },
+                        {
+                          stage: "Recruiter Screen",
+                          date: "May 28, 2025",
+                          time: "3:30 PM – 4:00 PM",
+                          interviewer: "Aisha Patel · Recruiter",
+                          status: "Completed",
+                          statusColor: "bg-emerald-100 text-emerald-700",
+                          dotColor: "bg-outline-variant",
+                          notes: "Initial screening completed. Candidate confirmed availability, salary expectations ($135k–$145k), and remote-first preference. Strong motivation for the role.",
+                          tags: ["Screening", "Compensation", "Availability"],
+                        },
+                        {
+                          stage: "Application Received",
+                          date: "May 20, 2025",
+                          time: "Via LinkedIn",
+                          interviewer: "Automated Pipeline",
+                          status: "Archived",
+                          statusColor: "bg-surface-container text-on-surface-variant",
+                          dotColor: "bg-outline-variant",
+                          notes: "Application submitted through LinkedIn. Resume and portfolio reviewed by AI screening system. Score: 91/100 — advanced to recruiter queue.",
+                          tags: ["Application", "AI Screen", "LinkedIn"],
+                        },
+                      ].map((item, idx) => (
+                        <div key={idx} className="relative pl-14 group">
+                          <div className={`absolute left-[17px] top-5 w-3.5 h-3.5 rounded-full ${item.dotColor} border-4 border-[#F4F2FF] z-10 group-hover:scale-125 transition-transform`} />
+                          <div className="bg-white rounded-2xl p-6 shadow-card-soft border border-outline-variant/20 relative overflow-hidden hover:-translate-y-0.5 transition-all duration-300">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-hero-a opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                              <div>
+                                <h3 className="font-title-md text-title-md text-on-surface font-bold">{item.stage}</h3>
+                                <p className="text-xs text-on-surface-variant mt-0.5">{item.interviewer}</p>
+                              </div>
+                              <div className="flex flex-col items-start sm:items-end gap-1.5 flex-shrink-0">
+                                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${item.statusColor}`}>{item.status}</span>
+                                <div className="flex items-center gap-1.5 text-xs text-on-surface-variant">
+                                  <PortalIcon name="calendar_today" className="text-[14px]" />
+                                  <span>{item.date}</span>
+                                  <span className="text-outline-variant">·</span>
+                                  <PortalIcon name="schedule" className="text-[14px]" />
+                                  <span>{item.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-sm text-on-surface-variant leading-relaxed mb-4">{item.notes}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {item.tags.map((tag) => (
+                                <span key={tag} className="px-2.5 py-1 rounded-full bg-[#F4F2FF] text-[#534AB7] text-[11px] font-bold">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab !== "evaluation" && activeTab !== "overview" && activeTab !== "experience" && activeTab !== "insights" && activeTab !== "history" && (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <div className="w-16 h-16 rounded-full bg-[#EEEDFE] flex items-center justify-center mb-4">
                   <PortalIcon
@@ -1290,159 +1867,416 @@ const PIPELINE_STAGES = [
 ];
 
 export function PipelinePage() {
-  const [filter, setFilter] = useState<"all" | "action">("all");
+  const [filter, setFilter] = useState<"all" | "review" | "interviews">("all");
+
+  const showInitialReview = filter === "all" || filter === "review";
+  const showTechnicalScreen = filter === "all" || filter === "review" || filter === "interviews";
+  const showFinalInterview = filter === "all" || filter === "interviews";
 
   return (
-    <div className="flex-1 md:ml-sidebar-width min-h-screen bg-[#F4F2FF]">
-      <main className="px-margin-desktop pb-24 max-w-3xl mx-auto pt-10">
-        {/* Header row */}
-        <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
-          <div>
-            <h1 className="text-[38px] font-bold text-[#26215C] leading-tight">
-              Pipeline
-            </h1>
-            <p className="text-body-md text-on-surface-variant mt-1">
-              Senior Full-Stack Developer
-            </p>
+    <div className="flex-1 md:ml-sidebar-width min-h-screen bg-surface flex flex-col overflow-hidden relative">
+      {/* TopNavBar */}
+      <header className="sticky top-0 w-full z-40 bg-surface/90 backdrop-blur-md flex justify-between items-center px-margin-desktop py-4 transition-all duration-200">
+        {/* Left: Mobile Nav Toggle (Hidden on Desktop) & Context Title */}
+        <div className="flex items-center gap-4">
+          <button className="md:hidden p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all duration-200">
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+          <div className="md:hidden">
+            <h2 className="font-headline-sm text-headline-sm font-bold text-primary">CareerBridge+</h2>
           </div>
-          <div className="flex gap-0 bg-white rounded-full p-1 border border-outline-variant/20 mt-1">
-            {(["all", "action"] as const).map((f) => (
+        </div>
+        {/* Right: Actions & Profile */}
+        <div className="flex items-center gap-2">
+          {/* Trailing Icon Actions */}
+          <button className="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all duration-200 text-primary">
+            <span className="material-symbols-outlined">notifications</span>
+          </button>
+          <button className="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all duration-200 text-primary">
+            <span className="material-symbols-outlined">settings</span>
+          </button>
+          <div className="w-px h-8 bg-outline-variant/50 mx-2"></div>
+          {/* Profile */}
+          <button className="flex items-center gap-3 p-1 pr-3 hover:bg-surface-variant/50 rounded-full transition-all duration-200">
+            <img
+              alt="Recruiter Profile"
+              className="w-8 h-8 rounded-full object-cover border border-outline-variant/30"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ_jh6OrUWfaQhv3bpeqWwQodDkZxP5jgV9XIk4_VJOVjEUJs7m54JjysN6TWt3Ob57oTEm2fOJaeqtG55afVZIBCHtHvmxKRAQ8a-AAXw7uEYNkf-BU6zTKjHbnyHanyo-ne1q17LyHTq-HrQtF-5OW1J0cxnvzCEZDDJU0wJt8ySAe0DZ1FFbnjwRPdaYezVo1FFeqr41Shc8FqMnEe5tqAiSxEHWO5vSSzmn0iH5jRegs1kZu4bN83hePTAJUa10lBAA3v5uRA"
+            />
+          </button>
+        </div>
+      </header>
+
+      {/* Page Canvas */}
+      <main className="flex-1 overflow-y-auto scroller px-4 md:px-margin-desktop pb-24">
+        <div className="max-w-container-max mx-auto mt-8 md:mt-12">
+          {/* Page Header */}
+          <div className="mb-12 flex items-end justify-between">
+            <div>
+              <h1 className="font-display-lg text-display-lg text-primary tracking-tight">Pipeline</h1>
+              <p className="font-title-md text-title-md text-on-surface-variant mt-2 font-normal">Senior Full-Stack Developer</p>
+            </div>
+            {/* Quick Filters */}
+            <div className="hidden sm:flex items-center gap-2 bg-surface-container-low p-1 rounded-full border border-surface-container-high shadow-sm">
               <button
-                key={f}
-                type="button"
-                onClick={() => setFilter(f)}
-                className={`px-5 py-1.5 rounded-full text-sm font-bold transition-all ${
-                  filter === f
-                    ? "bg-[#26215C] text-white"
+                onClick={() => setFilter("all")}
+                className={`px-4 py-1.5 rounded-full font-label-lg text-label-lg font-bold transition-all ${
+                  filter === "all"
+                    ? "bg-surface-container-lowest text-primary shadow-sm"
                     : "text-on-surface-variant hover:text-primary"
                 }`}
               >
-                {f === "all" ? "All" : "Requires Action"}
+                All Stages
               </button>
-            ))}
+              <button
+                onClick={() => setFilter("review")}
+                className={`px-4 py-1.5 rounded-full font-label-lg text-label-lg font-bold transition-all ${
+                  filter === "review"
+                    ? "bg-surface-container-lowest text-primary shadow-sm"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                Needs Review
+              </button>
+              <button
+                onClick={() => setFilter("interviews")}
+                className={`px-4 py-1.5 rounded-full font-label-lg text-label-lg font-bold transition-all ${
+                  filter === "interviews"
+                    ? "bg-surface-container-lowest text-primary shadow-sm"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                Interviews
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Stages */}
-        <div className="space-y-8">
-          {PIPELINE_STAGES.map((stage) => (
-            <section key={stage.label}>
-              {/* Stage divider */}
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-secondary whitespace-nowrap">
-                  {stage.label} ({stage.count})
-                </span>
-                <div className="flex-1 h-px bg-outline-variant/30" />
-              </div>
-
-              {/* Candidate rows */}
-              <div className="space-y-1">
-                {stage.candidates.map((c) => {
-                  const isTop = (c as any).topMatch;
-                  return (
-                    <Link
-                      key={c.name}
-                      href="/employer/candidate/1"
-                      className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group hover:bg-white/80 ${
-                        isTop
-                          ? "bg-white border-l-4 border-secondary rounded-l-none"
-                          : "bg-transparent"
-                      }`}
-                    >
-                      {/* Score */}
-                      <span className="font-bold text-[15px] text-[#26215C] w-9 text-right shrink-0">
-                        {c.score}%
-                      </span>
-
-                      {/* Avatar */}
-                      {(c as any).img ? (
-                        <img
-                          src={(c as any).img}
-                          alt={c.name}
-                          className="w-10 h-10 rounded-full object-cover shrink-0"
-                        />
-                      ) : (
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                            (c as any).initialsColor ??
-                            "bg-primary-fixed text-primary"
-                          }`}
-                        >
-                          {(c as any).initials}
-                        </div>
-                      )}
-
-                      {/* Name + sub */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-[#1a1a2e] group-hover:text-primary transition-colors">
-                          {c.name}
-                        </p>
-                        {isTop ? (
-                          <span className="text-xs font-bold text-secondary">
-                            {c.sub}
-                          </span>
-                        ) : (
-                          <p className="text-xs text-on-surface-variant mt-0.5">
-                            {c.sub}
-                          </p>
-                        )}
+          {/* High-Precision List View */}
+          <div className="flex flex-col gap-8">
+            {/* STAGE 1: Initial Review */}
+            {showInitialReview && (
+              <section className="animate-fade-up" style={{ animationDelay: "0.1s" }}>
+                <div className="flex items-center justify-between mb-4 px-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-secondary"></div>
+                    <h2 className="font-title-md text-title-md text-on-surface uppercase tracking-[0.1em] font-bold">Initial Review</h2>
+                  </div>
+                  <span className="font-mono-data text-outline font-normal">{filter === "review" ? "2 Candidates" : "3 Candidates"}</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {/* Marcus Chen */}
+                  <Link
+                    href="/employer/candidate/1"
+                    className="group bg-surface-container-lowest border border-surface-container-high hover:border-secondary/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex items-center gap-6">
+                      <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-primary w-12 text-right">98%</div>
+                      <img
+                        alt="Marcus Chen"
+                        className="w-10 h-10 rounded-full object-cover border border-surface-container-high group-hover:border-outline-variant transition-colors"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYUQbkbSVR0T0v2sJvgIVc6ddfQsKAfIex1pNXeAKxCthqeyHYlMF-qsF6K2iIAnPGrCa3fpUIiDaDdtp4DWY4qkzStoCTC_vGF9ECsWURDIWPR196tAIcF5KUHY4zmdrU3NcT5s9gL5CUzEI2qPjveWwUwyb1LGtGcqMni1si0l71tkKFHNRoWngeEkjzxI-Q_5in-WetKdx_OdIgvA5ZLYJzD_bXcWBb1shL7OthOepjzjlKSZnucitsMt_OSG33XL6uQxfvFMQ"
+                      />
+                      <div className="flex flex-col">
+                        <h3 className="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Marcus Chen</h3>
+                        <p className="font-body-md text-body-md text-on-surface-variant">Prev. Staff Engineer @ Acme Corp</p>
                       </div>
-
-                      {/* Badge or CTA */}
-                      {isTop ? (
+                    </div>
+                    <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono-data text-[12px] text-on-surface-variant">Applied 2h ago</span>
+                        <span className="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm">High Match</span>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 bg-surface-container-lowest pl-4 py-2 shadow-[-10px_0_10px_rgba(255,255,255,1)] sm:relative sm:right-auto sm:shadow-none sm:pl-0 sm:py-0">
                         <button
-                          type="button"
-                          className="flex items-center gap-2 px-5 py-2.5 bg-[#26215C] hover:bg-[#534AB7] text-white text-sm font-bold rounded-full transition-colors shrink-0"
-                          onClick={(e) => e.preventDefault()}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-colors"
+                          title="Reject"
                         >
-                          Prepare Offer
-                          <PortalIcon
-                            name="arrow_forward"
-                            className="text-[15px]"
-                          />
+                          <span className="material-symbols-outlined text-[18px]">close</span>
                         </button>
-                      ) : (
-                        <div className="flex items-center gap-3 shrink-0">
-                          {(c as any).badge &&
-                            (() => {
-                              const b = (c as any).badge;
-                              const badgeClass =
-                                b.style === "amber"
-                                  ? "bg-[#FDF4E7] text-[#7C4A00] border border-[#F5C842]/40"
-                                  : "bg-white text-on-surface-variant border border-outline-variant/30";
-                              return (
-                                <span
-                                  className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full ${badgeClass}`}
-                                >
-                                  {b.dot && (
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#F5A623] shrink-0" />
-                                  )}
-                                  {b.icon && (
-                                    <PortalIcon
-                                      name={b.icon}
-                                      className="text-[13px]"
-                                    />
-                                  )}
-                                  {b.text}
-                                </span>
-                              );
-                            })()}
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                          title="Review"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors"
+                          title="Advance"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+
+                  {/* Sarah Jenkins */}
+                  <Link
+                    href="/employer/candidate/1"
+                    className="group bg-surface-container-lowest border border-surface-container-high hover:border-secondary/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex items-center gap-6">
+                      <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-primary w-12 text-right">94%</div>
+                      <div className="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-title-md border border-surface-container-high group-hover:border-outline-variant transition-colors">SJ</div>
+                      <div className="flex flex-col">
+                        <h3 className="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Sarah Jenkins</h3>
+                        <p className="font-body-md text-body-md text-on-surface-variant">Senior Developer @ FinTech</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono-data text-[12px] text-on-surface-variant">Applied 5h ago</span>
+                        <span className="px-2.5 py-1 rounded-md bg-secondary-container/20 text-secondary-container border border-secondary-container/30 font-label-sm text-label-sm">Referred</span>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 bg-surface-container-lowest pl-4 py-2 shadow-[-10px_0_10px_rgba(255,255,255,1)] sm:relative sm:right-auto sm:shadow-none sm:pl-0 sm:py-0">
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-colors"
+                          title="Reject"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                          title="Review"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors"
+                          title="Advance"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+
+                  {/* Aisha Patel */}
+                  {filter !== "review" && (
+                    <Link
+                      href="/employer/candidate/1"
+                      className="group bg-surface-container-lowest border border-surface-container-high hover:border-secondary/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden"
+                    >
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="flex items-center gap-6">
+                        <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-outline w-12 text-right">82%</div>
+                        <img
+                          alt="Aisha Patel"
+                          className="w-10 h-10 rounded-full object-cover border border-surface-container-high group-hover:border-outline-variant transition-colors opacity-90 group-hover:opacity-100"
+                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLdecG9WQpFALQHItZMZz65mOkqw7vnx-MiuQbE8GTkMrtjbJmsfoAFSSu7PPn6uMOH4j9ZvSbNhlBTDTZkiMEE2TeMRwIkVLGkAGJRpJuSRWULFVab0nOSgyarE6g3QazAfrT1jxc5n6DJ-3Jx_JyzbM5LFcGshJDNdCWOduDMKUZPBCaixgXReZ5MvAiR5CslPxEWilEpU5pAP8MEsbqKv1OJSWgpK2KzLHWzCjvlyfj8CvjfWlnsQdp-3lVInkTM9F6rAKEO5Y"
+                        />
+                        <div className="flex flex-col">
+                          <h3 className="font-title-md text-title-md text-on-surface opacity-90 group-hover:text-primary transition-colors">Aisha Patel</h3>
+                          <p className="font-body-md text-body-md text-on-surface-variant">Full-Stack Dev</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono-data text-[12px] text-on-surface-variant">Applied 1d ago</span>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 bg-surface-container-lowest pl-4 py-2 shadow-[-10px_0_10px_rgba(255,255,255,1)] sm:relative sm:right-auto sm:shadow-none sm:pl-0 sm:py-0">
                           <button
-                            type="button"
-                            className="text-on-surface-variant/50 hover:text-on-surface transition-colors text-base tracking-widest px-1"
-                            aria-label="More options"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-colors"
+                            title="Reject"
                           >
-                            •••
+                            <span className="material-symbols-outlined text-[18px]">close</span>
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                            title="Review"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">visibility</span>
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors"
+                            title="Advance"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                           </button>
                         </div>
-                      )}
+                      </div>
                     </Link>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* STAGE 2: Technical Screen */}
+            {showTechnicalScreen && (
+              <section className="animate-fade-up" style={{ animationDelay: "0.2s" }}>
+                <div className="flex items-center justify-between mb-4 mt-6 px-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <h2 className="font-title-md text-title-md text-on-surface uppercase tracking-[0.1em] font-bold">Technical Screen</h2>
+                  </div>
+                  <span className="font-mono-data text-outline font-normal">{filter === "review" ? "1 Candidate" : filter === "interviews" ? "2 Candidates" : "2 Candidates"}</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {/* David O'Connor */}
+                  <Link
+                    href="/employer/candidate/1"
+                    className="group bg-surface-bright/50 border border-surface-container-high hover:border-secondary/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex items-center gap-6">
+                      <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-primary w-12 text-right">91%</div>
+                      <img
+                        alt="David O'Connor"
+                        className="w-10 h-10 rounded-full object-cover border border-surface-container-high group-hover:border-outline-variant transition-colors"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXP6e3S3DoIE9V8jc5a8vdSqwgYSBTCunPyplXHPZYPY3Im5pEeiOYeGKlDQFR0qlDn4z0iVgQSCRZtgr46MuUzgB1_pogKl8P9DHdEx_Gzcjmvy_xNMVit_ZYAGXNWrOmrNdxkB0fMGD6T0V5cA4hkYhkHbpAVy90H2WqKO3MKcsYZR3ZneEtqVYPmwvU7G14k_T_Aajp7XmKijMZmyFSqsCw9lbfOyC2qfmWYW2ZJTCMR4Zt6LNrSqj9C8JcP6I1tjR_WD9thPA"
+                      />
+                      <div className="flex flex-col">
+                        <h3 className="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">David O'Connor</h3>
+                        <p className="font-body-md text-body-md text-on-surface-variant">Systems Architect</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/20 text-secondary-container font-mono-data text-[12px] font-bold border border-secondary-container/30">
+                          <div className="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></div>
+                          Awaiting Score
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 bg-surface-bright/90 pl-4 py-2 shadow-[-10px_0_10px_rgba(253,247,255,1)] sm:relative sm:right-auto sm:shadow-none sm:pl-0 sm:py-0">
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-colors"
+                          title="Reject"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                          title="Review"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors"
+                          title="Advance"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+
+                  {/* Linda Wang */}
+                  {filter !== "review" && (
+                    <Link
+                      href="/employer/candidate/1"
+                      className="group bg-surface-bright/50 border border-surface-container-high hover:border-secondary/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden"
+                    >
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="flex items-center gap-6">
+                        <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-primary w-12 text-right">88%</div>
+                        <div className="w-10 h-10 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-title-md border border-surface-container-high group-hover:border-outline-variant transition-colors">LW</div>
+                        <div className="flex flex-col">
+                          <h3 className="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Linda Wang</h3>
+                          <p className="font-body-md text-body-md text-on-surface-variant">Backend Engineer</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono-data text-[12px] px-3 py-1 rounded-full bg-surface-container text-on-surface-variant flex items-center gap-1.5 border border-surface-container-high">
+                            <span className="material-symbols-outlined text-[14px]">event</span>
+                            Scheduled Tomorrow
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 bg-surface-bright/90 pl-4 py-2 shadow-[-10px_0_10px_rgba(253,247,255,1)] sm:relative sm:right-auto sm:shadow-none sm:pl-0 sm:py-0">
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-colors"
+                            title="Reject"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">close</span>
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-colors"
+                            title="Review"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">visibility</span>
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors"
+                            title="Advance"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                          </button>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* STAGE 3: Final Interview */}
+            {showFinalInterview && (
+              <section className="animate-fade-up" style={{ animationDelay: "0.3s" }}>
+                <div className="flex items-center justify-between mb-4 mt-6 px-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-secondary to-primary"></div>
+                    <h2 className="font-title-md text-title-md text-on-surface uppercase tracking-[0.1em] font-bold">Final Interview</h2>
+                  </div>
+                  <span className="font-mono-data text-outline font-normal">1 Candidate</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {/* Emily Thorne */}
+                  <Link
+                    href="/employer/candidate/1"
+                    className="group bg-surface-container-lowest border border-primary/20 hover:border-primary/50 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(99,62,211,0.05)] hover:shadow-[0_8px_30px_rgba(99,62,211,0.1)] relative overflow-hidden"
+                  >
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-secondary to-primary"></div>
+                    <div className="flex items-center gap-6">
+                      <div className="font-mono-data text-mono-data text-[20px] leading-none font-bold text-primary w-12 text-right">99%</div>
+                      <div className="relative">
+                        <img
+                          alt="Emily Thorne"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-surface-container-lowest shadow-sm"
+                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOSd7VUwiMZlChOLwMZCXqYwlwM1CiLnoMEqDDjXKn6yzq41zjNsPyFZgwZ3aI-6p8jvreAQd5tbZeKKwMArKLGvBMzCGygvNaeP8o-oHdhYzGWqZkONYL1gNkrYNIlpm_qr0FB8Ohq5sURjSKbKedAI2zs0k0L6gr0aWWojOQly33zLMl5klxBWuYf7bwIU2WZo2Muz_rnPc8FY4mu8NDYhOHIxuQQ15LuA4Eppa1MT1Dznw3S8PFw0GWIZnsC1jHqr0GJPRNfZU"
+                        />
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-surface-container-lowest flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[10px] text-white" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="font-title-md text-title-md text-on-surface">Emily Thorne</h3>
+                        <p className="font-label-sm text-label-sm text-primary font-medium uppercase tracking-wider mt-0.5">Top Match</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between sm:justify-end gap-6 mt-4 sm:mt-0 ml-[72px] sm:ml-0">
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                        className="px-5 py-2 rounded-full bg-gradient-to-r from-secondary to-primary text-on-primary font-label-lg text-label-lg font-bold hover:shadow-md transition-all duration-200 active:scale-95 flex items-center gap-2"
+                      >
+                        Prepare Offer
+                        <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                      </button>
+                    </div>
+                  </Link>
+                </div>
+              </section>
+            )}
+          </div>
+          {/* End of list padding */}
+          <div className="h-12 w-full flex items-center justify-center mt-10">
+            <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/50"></div>
+          </div>
         </div>
       </main>
     </div>
@@ -3947,6 +4781,175 @@ export function EmployerJobsPage() {
           Post New Job
         </span>
       </Link>
+    </div>
+  );
+}
+
+export function PageTransition({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <div key={pathname} className="flex-1 min-w-0 animate-tab-enter">
+      {children}
+    </div>
+  );
+}
+
+export function EmployerSettingsPage() {
+  return (
+    <div className="flex-1 md:ml-sidebar-width flex flex-col min-h-screen bg-background pb-24">
+      {/* Top Navigation Area (Mobile Only) */}
+      <header className="md:hidden flex justify-between items-center w-full px-4 h-16 bg-surface/90 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant">
+        <h1 className="font-headline-sm text-headline-sm font-bold text-primary">Settings</h1>
+        <div className="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+          <img
+            alt="User Avatar"
+            className="w-full h-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU5XX34hWYBvCxR5-WAGfKzDRugQLgCaPL7nR4GD8ISrlTZNLFw2rYEt7A2gnQaKb_GeHetOD70BTJGMQlXJqLkrKO-VJeEY78LohqXoMw-K6vX5lvkhwxIYZv7N1HbA_CTWO4eWjzbSuWBp30wf7gvTG1M2UH6IMeh_V6yQiAN_0I46CFwOsxdImlaOSwQtdX0MvKsJQSvVQSuedIZRUuBQwfsYIQQ3v9XRzgFIuhYfJ8ZHAPWJ2sbmGN5FDjJ2D_mgVq0C3gAHk"
+          />
+        </div>
+      </header>
+
+      <div className="max-w-[1200px] mx-auto px-margin-desktop pt-8 pb-12 w-full">
+        <div className="mb-10">
+          <h2 className="font-headline-lg text-headline-lg text-primary mb-2">Settings &amp; Configuration</h2>
+          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+            Manage your workspace preferences, security configurations, and external service integrations to optimize your recruitment workflow.
+          </p>
+        </div>
+
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Account Security Card */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-1 bg-surface-container-lowest rounded-[24px] p-[32px] shadow-ambient-soft border border-surface-variant flex flex-col relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary-container"></div>
+            <div className="flex items-start justify-between mb-6">
+              <div className="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+                <PortalIcon name="security" className="text-[28px]" />
+              </div>
+              <span className="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1 rounded-full flex items-center gap-1">
+                <PortalIcon name="error" className="text-[14px]" /> Needs Attention
+              </span>
+            </div>
+            <h3 className="font-title-lg text-title-lg text-on-surface mb-2">Account Security</h3>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-8 flex-1">
+              Two-factor authentication is currently disabled for your workspace administrators.
+            </p>
+            <button className="w-full py-3 rounded-full border border-outline hover:bg-surface-container-low transition-colors font-label-lg text-label-lg text-on-surface font-medium flex items-center justify-center gap-2 group-hover:border-primary group-hover:text-primary">
+              Configure 2FA
+              <PortalIcon name="arrow_forward" className="text-[18px]" />
+            </button>
+          </div>
+
+          {/* Integrations Card */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-surface-container-lowest rounded-[24px] p-[32px] shadow-ambient-soft border border-surface-variant flex flex-col">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+                  <PortalIcon name="extension" className="text-[28px]" />
+                </div>
+                <div>
+                  <h3 className="font-title-lg text-title-lg text-on-surface">Active Integrations</h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant">Connected ATS and HRIS platforms</p>
+                </div>
+              </div>
+              <button className="w-10 h-10 rounded-full bg-surface-container hover:bg-surface-variant flex items-center justify-center text-on-surface transition-colors">
+                <PortalIcon name="add" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Workday */}
+              <div className="p-4 rounded-xl border border-outline-variant bg-surface-bright flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded bg-[#005CB9]/10 flex items-center justify-center text-[#005CB9] font-bold">W</div>
+                  <div>
+                    <h4 className="font-title-md text-title-md text-on-surface text-[15px]">Workday</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant text-[13px] flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-[#10B981]"></span> Synced 2m ago
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-mono-data text-mono-data text-on-surface">98.4%</p>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant uppercase">Uptime</p>
+                </div>
+              </div>
+              {/* Greenhouse */}
+              <div className="p-4 rounded-xl border border-outline-variant bg-surface-bright flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded bg-[#00B289]/10 flex items-center justify-center text-[#00B289] font-bold">G</div>
+                  <div>
+                    <h4 className="font-title-md text-title-md text-on-surface text-[15px]">Greenhouse</h4>
+                    <p className="font-body-md text-body-md text-on-surface-variant text-[13px] flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-[#10B981]"></span> Synced 15m ago
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-mono-data text-mono-data text-on-surface">99.9%</p>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant uppercase">Uptime</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Email Templates Card */}
+          <div className="col-span-1 bg-surface-container-lowest rounded-[24px] p-[32px] shadow-ambient-soft border border-surface-variant flex flex-col">
+            <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-on-surface mb-6">
+              <PortalIcon name="mail" className="text-[28px]" />
+            </div>
+            <h3 className="font-title-lg text-title-lg text-on-surface mb-2">Email Templates</h3>
+            <p className="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">
+              Standardize your outreach with customizable templates for candidate communication.
+            </p>
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-body-md text-on-surface">Active Templates</span>
+                <span className="font-mono-data text-on-surface font-bold">12</span>
+              </div>
+              <div className="w-full bg-surface-variant rounded-full h-1.5">
+                <div className="bg-primary h-1.5 rounded-full" style={{ width: "45%" }}></div>
+              </div>
+              <p className="font-label-sm text-label-sm text-on-surface-variant text-right">45% Usage Rate</p>
+            </div>
+            <button className="w-full py-2.5 rounded-full bg-surface-container-high hover:bg-surface-variant transition-colors font-label-lg text-label-lg text-on-surface font-medium">
+              Manage Templates
+            </button>
+          </div>
+
+          {/* Subscription Plan Card */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-gradient-to-br from-surface-container-lowest to-surface-bright rounded-[24px] p-[32px] shadow-ambient-soft border border-primary/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+            <div className="absolute -right-12 -top-12 w-48 h-48 bg-primary-fixed-dim/20 rounded-full blur-3xl"></div>
+            <div className="relative z-10 flex-1">
+              <span className="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-3 py-1 rounded-full mb-4 inline-block">Current Plan</span>
+              <h3 className="font-headline-lg text-headline-lg text-primary mb-2">Enterprise Plus</h3>
+              <p className="font-body-lg text-body-lg text-on-surface-variant">Billed annually on Nov 14, 2024</p>
+              <div className="flex items-center gap-6 mt-6">
+                <div>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Seats Used</p>
+                  <p className="font-mono-data text-mono-data text-title-md text-on-surface">
+                    42 <span className="text-outline text-body-md font-sans">/ 50</span>
+                  </p>
+                </div>
+                <div className="h-8 w-px bg-outline-variant"></div>
+                <div>
+                  <p className="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">AI Screening Volume</p>
+                  <p className="font-mono-data text-mono-data text-title-md text-on-surface">
+                    8.4k <span className="text-outline text-body-md font-sans">/ 10k</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="relative z-10 w-full md:w-auto flex flex-col gap-3">
+              <button className="w-full md:w-auto px-6 py-3 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold hover:bg-primary/90 transition-colors shadow-md">
+                Upgrade Plan
+              </button>
+              <button className="w-full md:w-auto px-6 py-3 rounded-full border border-outline hover:bg-surface-container-low transition-colors font-label-lg text-label-lg text-on-surface font-medium">
+                Billing History
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
