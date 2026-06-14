@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { UniversitySidebar } from "../_components/portal";
+import { UniversitySidebar, PageTransition } from "../_components/portal";
 
 export default function UniversityLayout({
   children,
@@ -10,7 +10,7 @@ export default function UniversityLayout({
   return (
     <div className="flex min-h-screen">
       <UniversitySidebar />
-      {children}
+      <PageTransition>{children}</PageTransition>
     </div>
   );
 }
