@@ -203,8 +203,7 @@ const universityMenuItems = [
     label: "Curriculum Intel",
     icon: "auto_stories",
   },
-  { path: "/university/talent", label: "Talent Pool", icon: "person_search" },
-  { path: "/university/analytics", label: "Analytics", icon: "analytics" },
+  { path: "/university/analytics", label: "Talent Pool", icon: "person_search" },
 ] as const;
 
 export function EmployerSidebar() {
@@ -633,27 +632,16 @@ export function UniversitySidebar() {
   return (
     <aside className="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container flex flex-col py-6 px-4 z-50 shadow-[rgba(99,62,211,0.06)_4px_0px_24px]">
       <div
-        className="flex items-center gap-4 px-2 mb-8 cursor-pointer"
+        className="px-2 mb-8 cursor-pointer"
         onClick={() => router.push("/")}
       >
-        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0 text-on-primary">
-          <PortalIcon name="school" filled />
-        </div>
-        <div>
-          <h1 className="font-headline-sm text-headline-sm font-bold text-primary leading-tight">
-            Univ Intelligence
-          </h1>
-          <p className="font-label-sm text-label-sm text-on-surface-variant">
-            CareerBridge+
-          </p>
-        </div>
+        <h1 className="font-title-lg text-title-lg font-bold text-primary leading-tight">
+          CareerBridge+
+        </h1>
+        <p className="font-label-sm text-label-sm text-on-surface-variant text-xs font-medium">
+          Univ Intelligence
+        </p>
       </div>
-      <button
-        type="button"
-        className="mb-8 w-full bg-linear-to-r from-primary to-secondary text-on-primary font-label-lg text-label-lg py-3 px-4 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95 flex justify-center items-center gap-2"
-      >
-        <PortalIcon name="add" className="text-[18px]" /> Post New Vacancy
-      </button>
       <nav className="flex-1 flex flex-col gap-2">
         {universityMenuItems.map((item) => (
           <Link
@@ -2134,6 +2122,511 @@ export function UniversityDashboard() {
           </div>
         </div>
       </main>
+    </div>
+  );
+}
+
+const MOCK_STUDENTS = [
+  {
+    id: 1,
+    name: "Aisha Amin",
+    major: "Computer Science",
+    faculty: "Computer Science",
+    year: "Final Year",
+    skillset: "React",
+    techScore: 85,
+    softSkills: "Advanced",
+    topMatch: "Tech Corp (87%)",
+    verified: ["React", "Node.js", "Python"],
+    missing: ["Docker"],
+  },
+  {
+    id: 2,
+    name: "James Chen",
+    major: "Data Science",
+    faculty: "Data Science",
+    year: "3rd Year",
+    skillset: "AWS",
+    techScore: 78,
+    softSkills: "Intermediate",
+    topMatch: "Cloud Solutions Inc (82%)",
+    verified: ["Python", "SQL", "AWS"],
+    missing: ["Kubernetes"],
+  },
+  {
+    id: 3,
+    name: "Sofia Rodriguez",
+    major: "Computer Science",
+    faculty: "Computer Science",
+    year: "2nd Year",
+    skillset: "Node.js",
+    techScore: 72,
+    softSkills: "Advanced",
+    topMatch: "StartUp Labs (76%)",
+    verified: ["JavaScript", "Node.js", "React"],
+    missing: ["Docker", "AWS"],
+  },
+  {
+    id: 4,
+    name: "Liam O'Brien",
+    major: "Engineering",
+    faculty: "Engineering",
+    year: "Final Year",
+    skillset: "Docker",
+    techScore: 88,
+    softSkills: "Expert",
+    topMatch: "DevOps Masters (91%)",
+    verified: ["Docker", "Kubernetes", "Linux"],
+    missing: [],
+  },
+  {
+    id: 5,
+    name: "Priya Patel",
+    major: "Data Science",
+    faculty: "Data Science",
+    year: "1st Year",
+    skillset: "Docker",
+    techScore: 65,
+    softSkills: "Beginner",
+    topMatch: "Analytics Hub (68%)",
+    verified: ["Python"],
+    missing: ["AWS", "Docker", "SQL"],
+  },
+  {
+    id: 6,
+    name: "Marcus Johnson",
+    major: "Computer Science",
+    faculty: "Computer Science",
+    year: "3rd Year",
+    skillset: "React",
+    techScore: 82,
+    softSkills: "Intermediate",
+    topMatch: "Frontend Experts (85%)",
+    verified: ["React", "TypeScript", "CSS"],
+    missing: ["Node.js"],
+  },
+  {
+    id: 7,
+    name: "Amara Okafor",
+    major: "Engineering",
+    faculty: "Engineering",
+    year: "2nd Year",
+    skillset: "AWS",
+    techScore: 75,
+    softSkills: "Advanced",
+    topMatch: "Cloud Engineers (79%)",
+    verified: ["AWS", "Linux", "Python"],
+    missing: ["Docker"],
+  },
+  {
+    id: 8,
+    name: "Yuki Tanaka",
+    major: "Data Science",
+    faculty: "Data Science",
+    year: "Final Year",
+    skillset: "AWS",
+    techScore: 90,
+    softSkills: "Expert",
+    topMatch: "Tech Corp (93%)",
+    verified: ["Python", "SQL", "AWS", "Machine Learning"],
+    missing: [],
+  },
+  {
+    id: 9,
+    name: "Sophia Mueller",
+    major: "Computer Science",
+    faculty: "Computer Science",
+    year: "1st Year",
+    skillset: "Node.js",
+    techScore: 68,
+    softSkills: "Intermediate",
+    topMatch: "Web Dev Studio (71%)",
+    verified: ["JavaScript", "HTML/CSS"],
+    missing: ["Node.js", "React", "Docker"],
+  },
+  {
+    id: 10,
+    name: "David Kim",
+    major: "Engineering",
+    faculty: "Engineering",
+    year: "3rd Year",
+    skillset: "React",
+    techScore: 81,
+    softSkills: "Advanced",
+    topMatch: "Full Stack Inc (84%)",
+    verified: ["React", "Node.js", "MongoDB"],
+    missing: ["AWS"],
+  },
+];
+
+export function StudentTalentPoolPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [facultyFilter, setFacultyFilter] = useState("All");
+  const [yearFilter, setYearFilter] = useState("All");
+  const [skillsetFilter, setSkillsetFilter] = useState("All");
+  const [selectedStudent, setSelectedStudent] = useState<(typeof MOCK_STUDENTS)[0] | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const filteredStudents = MOCK_STUDENTS.filter((student) => {
+    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      student.major.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFaculty = facultyFilter === "All" || student.faculty === facultyFilter;
+    const matchesYear = yearFilter === "All" || student.year === yearFilter;
+    const matchesSkillset = skillsetFilter === "All" || student.skillset === skillsetFilter;
+
+    return matchesSearch && matchesFaculty && matchesYear && matchesSkillset;
+  });
+
+  const handleViewProfile = (student: (typeof MOCK_STUDENTS)[0]) => {
+    setSelectedStudent(student);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setTimeout(() => setSelectedStudent(null), 300);
+  };
+
+  return (
+    <div className="flex-1 md:ml-sidebar-width flex flex-col min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-30 flex justify-between items-center h-16 px-6 bg-background/90 backdrop-blur-md border-b border-outline-variant/10">
+        <h2 className="font-headline-sm text-headline-sm font-bold text-primary">
+          Student Talent Pool
+        </h2>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            aria-label="Search"
+          >
+            <PortalIcon name="search" />
+          </button>
+          <button
+            type="button"
+            className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors relative"
+            aria-label="Notifications"
+          >
+            <PortalIcon name="notifications" />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full" />
+          </button>
+        </div>
+      </header>
+
+      <main className="flex-1 p-margin-desktop max-w-container-max mx-auto w-full pb-12">
+        {/* Filter Bar */}
+        <div className="mb-6 p-6 bg-surface-container-lowest rounded-card border border-outline-variant/20 shadow-card-soft">
+          <div className="flex flex-col lg:flex-row gap-4 items-center">
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Search by name or major..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-full bg-surface-container border border-outline-variant/30 text-body-md text-on-surface placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all"
+            />
+
+            {/* Faculty Dropdown */}
+            <select
+              value={facultyFilter}
+              onChange={(e) => setFacultyFilter(e.target.value)}
+              className="px-6 py-3 rounded-full bg-surface-container border border-outline-variant/30 text-body-md text-on-surface font-label-lg focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all cursor-pointer appearance-none bg-no-repeat bg-right-4 pr-10"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23534AB7' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")`,
+              }}
+            >
+              <option>All</option>
+              <option>Computer Science</option>
+              <option>Engineering</option>
+              <option>Data Science</option>
+            </select>
+
+            {/* Year of Study Dropdown */}
+            <select
+              value={yearFilter}
+              onChange={(e) => setYearFilter(e.target.value)}
+              className="px-6 py-3 rounded-full bg-surface-container border border-outline-variant/30 text-body-md text-on-surface font-label-lg focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all cursor-pointer appearance-none bg-no-repeat bg-right-4 pr-10"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23534AB7' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")`,
+              }}
+            >
+              <option>All</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>Final Year</option>
+            </select>
+
+            {/* Core Skillset Dropdown */}
+            <select
+              value={skillsetFilter}
+              onChange={(e) => setSkillsetFilter(e.target.value)}
+              className="px-6 py-3 rounded-full bg-surface-container border border-outline-variant/30 text-body-md text-on-surface font-label-lg focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all cursor-pointer appearance-none bg-no-repeat bg-right-4 pr-10"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23534AB7' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")`,
+              }}
+            >
+              <option>All</option>
+              <option>Docker</option>
+              <option>AWS</option>
+              <option>React</option>
+              <option>Node.js</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Data Table */}
+        <div className="bg-surface-container-lowest rounded-card border border-outline-variant/20 shadow-card-soft overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-outline-variant/20 bg-surface-container/50">
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Name
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Major
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Faculty
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Year
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Core Skillset
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Tech Score
+                  </th>
+                  <th className="py-4 px-6 font-label-lg text-label-lg font-bold text-on-surface-variant">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/10">
+                {filteredStudents.map((student) => (
+                  <tr key={student.id} className="hover:bg-surface-container/30 transition-colors">
+                    <td className="py-4 px-6 text-body-md text-on-surface font-bold">
+                      {student.name}
+                    </td>
+                    <td className="py-4 px-6 text-body-md text-on-surface">
+                      {student.major}
+                    </td>
+                    <td className="py-4 px-6 text-body-md text-on-surface">
+                      {student.faculty}
+                    </td>
+                    <td className="py-4 px-6 text-body-md text-on-surface">
+                      {student.year}
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className="inline-flex items-center gap-1.5 bg-primary-fixed text-on-primary-fixed text-label-sm font-bold px-3 py-1 rounded-full">
+                        {student.skillset}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-body-md text-on-surface font-bold">
+                      {student.techScore}%
+                    </td>
+                    <td className="py-4 px-6">
+                      <button
+                        type="button"
+                        onClick={() => handleViewProfile(student)}
+                        className="text-secondary font-bold text-label-lg hover:underline transition-all cursor-pointer hover:text-secondary-container flex items-center gap-1"
+                      >
+                        View Profile →
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {filteredStudents.length === 0 && (
+            <div className="py-16 text-center">
+              <PortalIcon name="person_search" className="text-[48px] text-outline-variant mx-auto mb-4 opacity-50" />
+              <p className="text-body-md text-on-surface-variant">
+                No students match the current filters.
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Profile Drawer Overlay */}
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 transition-opacity duration-300"
+          onClick={handleCloseDrawer}
+          role="presentation"
+        />
+      )}
+
+      {/* Profile Drawer Panel */}
+      {selectedStudent && (
+        <div
+          className={`fixed right-0 top-0 h-screen w-full sm:w-[420px] bg-background shadow-lg z-50 transition-transform duration-300 flex flex-col ${
+            isDrawerOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between h-16 px-6 border-b border-outline-variant/10 bg-surface-container/50">
+            <h2 className="font-headline-sm text-headline-sm font-bold text-primary">
+              Profile Overview
+            </h2>
+            <button
+              type="button"
+              onClick={handleCloseDrawer}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors"
+              aria-label="Close drawer"
+            >
+              <PortalIcon name="close" className="text-[20px]" />
+            </button>
+          </div>
+
+          {/* Drawer Content */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {/* Profile Summary */}
+            <div className="bg-surface-container-lowest rounded-card p-6 border border-outline-variant/20">
+              <h3 className="text-label-lg font-bold text-on-surface-variant mb-4">
+                Profile Summary
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-label-sm text-on-surface-variant mb-1">
+                    Name
+                  </p>
+                  <p className="text-title-md font-bold text-on-surface">
+                    {selectedStudent.name}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-label-sm text-on-surface-variant mb-1">
+                    Major
+                  </p>
+                  <p className="text-body-md text-on-surface">
+                    {selectedStudent.major}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Skill Metrics */}
+            <div className="bg-surface-container-lowest rounded-card p-6 border border-outline-variant/20">
+              <h3 className="text-label-lg font-bold text-on-surface-variant mb-4">
+                Skill Metrics
+              </h3>
+              <div className="space-y-5">
+                {/* Tech Score Progress */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <p className="text-label-md font-bold text-on-surface">
+                      Tech Score
+                    </p>
+                    <p className="text-label-md font-bold text-secondary">
+                      {selectedStudent.techScore}%
+                    </p>
+                  </div>
+                  <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-accent-b rounded-full transition-all"
+                      style={{ width: `${selectedStudent.techScore}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Soft Skills Tag */}
+                <div>
+                  <p className="text-label-sm text-on-surface-variant mb-2">
+                    Soft Skills
+                  </p>
+                  <span className="inline-flex items-center gap-2 bg-primary-fixed text-on-primary-fixed px-4 py-2 rounded-full font-label-lg font-bold">
+                    {selectedStudent.softSkills}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Ecosystem Pipeline Matching */}
+            <div className="bg-gradient-primary-c text-on-primary rounded-card p-6 shadow-card-soft">
+              <h3 className="text-label-lg font-bold mb-3">
+                Top Match
+              </h3>
+              <p className="text-title-md font-bold">
+                {selectedStudent.topMatch}
+              </p>
+              <p className="text-body-sm opacity-90 mt-2">
+                Ecosystem pipeline matching indicates strong alignment with this employer's requirements.
+              </p>
+            </div>
+
+            {/* Verified Credentials vs Gaps */}
+            <div className="bg-surface-container-lowest rounded-card p-6 border border-outline-variant/20">
+              <h3 className="text-label-lg font-bold text-on-surface-variant mb-4">
+                Credentials & Gaps
+              </h3>
+              <div className="space-y-4">
+                {/* Verified Skills */}
+                {selectedStudent.verified.length > 0 && (
+                  <div>
+                    <p className="text-label-sm font-bold text-on-surface-variant mb-3">
+                      Verified Skills
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedStudent.verified.map((skill) => (
+                        <span
+                          key={skill}
+                          className="inline-flex items-center gap-1.5 bg-[#EAF3DE] text-[#27500A] px-3 py-2 rounded-full text-label-sm font-bold"
+                        >
+                          <PortalIcon name="check" className="text-[14px]" />
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Missing Skills (Gaps) */}
+                {selectedStudent.missing.length > 0 && (
+                  <div>
+                    <p className="text-label-sm font-bold text-on-surface-variant mb-3">
+                      Curriculum Gaps
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedStudent.missing.map((skill) => (
+                        <span
+                          key={skill}
+                          className="inline-flex items-center gap-1.5 bg-[#FCEBEB] text-[#791F1F] px-3 py-2 rounded-full text-label-sm font-bold border border-[#FCEBEB]"
+                        >
+                          <PortalIcon name="warning" className="text-[14px]" />
+                          {skill} Missing
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedStudent.verified.length === 0 && selectedStudent.missing.length === 0 && (
+                  <p className="text-body-md text-on-surface-variant text-center py-4">
+                    No skill data available.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Drawer Footer */}
+          <div className="border-t border-outline-variant/10 p-6 bg-surface-container/50">
+            <button
+              type="button"
+              onClick={handleCloseDrawer}
+              className="w-full px-6 py-3 bg-surface-container rounded-full text-on-surface font-label-lg font-bold hover:bg-surface-container-high transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
