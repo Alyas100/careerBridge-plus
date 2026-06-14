@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-import { EmployerSidebar } from "../_components/portal";
+import { EmployerSidebar, PageTransition } from "../_components/portal";
 
 export default function EmployerLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <EmployerSidebar />
-      {children}
+      <PageTransition>{children}</PageTransition>
     </div>
   );
 }
