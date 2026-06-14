@@ -457,9 +457,6 @@ export function InterviewsPage() {
                   <div className="lg:col-span-5 bg-white rounded-xl p-card-padding shadow-card-soft border border-surface-container-highest flex flex-col gap-6">
                     <div className="flex items-center justify-between">
                       <h3 className="font-title-lg text-title-lg text-on-surface">Skill Assessment</h3>
-                      <span className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded">
-                        Verified via Technical Screen
-                      </span>
                     </div>
                     <div className="flex flex-col gap-5">
                       {/* React */}
