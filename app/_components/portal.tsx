@@ -203,7 +203,10 @@ const universityMenuItems = [
     label: "Curriculum Intel",
     icon: "auto_stories",
   },
-  { path: "/university/analytics", label: "Talent Pool", icon: "person_search" },
+  { path: "/university/analytics", label: "Talent Pool", icon: "person_search",
+    
+   },
+{ path: "/university/readiness", label: "Student Readiness", icon: "school" },
 ] as const;
 
 export function EmployerSidebar() {
@@ -1232,6 +1235,321 @@ export function UniversitySidebar() {
   );
 }
 
+export function UniversityDashboard() {
+  return (
+    <div className="flex-1 ml-sidebar-width min-h-screen flex flex-col bg-background">
+      {/* Top bar */}
+      <header className="sticky top-0 z-30 flex justify-end items-center h-14 px-6 bg-background/90 backdrop-blur-md border-b border-outline-variant/10 gap-3">
+        <button
+          type="button"
+          className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors relative"
+          aria-label="Notifications"
+        >
+          <PortalIcon name="notifications" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full" />
+        </button>
+        <span className="font-body-md text-body-md text-on-surface-variant cursor-pointer hover:text-primary transition-colors">
+          Help
+        </span>
+        <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-lg text-label-lg font-bold">
+          DR
+        </div>
+      </header>
+
+      <main className="flex-1 p-6 max-w-container-max mx-auto w-full flex flex-col gap-5">
+        {/* KPI Section */}
+        <div>
+          <p className="font-label-lg text-label-lg text-on-surface-variant flex items-center gap-1.5 mb-3">
+            <PortalIcon name="bar_chart" className="text-[18px]" />
+            Institutional Health KPIs
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              {
+                label: "Total Students Placed",
+                val: "3,492",
+                badge: "+12%",
+                up: true,
+                icon: "school",
+              },
+              {
+                label: "Employer Engagement",
+                val: "94",
+                unit: "/100",
+                badge: "+2.4%",
+                up: true,
+                icon: "handshake",
+              },
+              {
+                label: "Curriculum Alignment",
+                val: "88%",
+                badge: "-1.5%",
+                up: false,
+                icon: "my_location",
+              },
+              {
+                label: "Active Vacancies",
+                val: "1,204",
+                badge: "+24",
+                up: true,
+                icon: "work",
+              },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-7 h-7 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+                    <PortalIcon name={stat.icon} className="text-[16px]" />
+                  </div>
+                  <span
+                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                      stat.up
+                        ? "bg-[#EAF3DE] text-[#27500A]"
+                        : "bg-[#FCEBEB] text-[#791F1F]"
+                    }`}
+                  >
+                    {stat.badge}
+                  </span>
+                </div>
+                <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">
+                  {stat.label}
+                </p>
+                <p className="font-mono-numbers text-[22px] font-bold text-on-surface leading-none">
+                  {stat.val}
+                  {stat.unit && (
+                    <span className="text-sm font-normal text-on-surface-variant">
+                      {stat.unit}
+                    </span>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hero Banner */}
+        <div className="rounded-xl bg-[#26215C] px-6 py-5 flex items-center justify-between gap-6">
+          <div>
+            <h2 className="text-[22px] font-bold text-white leading-tight mb-1">
+              Welcome back, Dean Roberts.
+            </h2>
+            <p className="text-sm text-white/70 max-w-sm leading-relaxed">
+              Your institutional health overview is ready. We've identified 3
+              new curriculum gaps based on recent employer hiring trends.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="flex items-center gap-2 bg-white/10 border border-white/20 text-white text-sm font-bold px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-white/20 transition-colors"
+          >
+            View Gap Analysis
+            <PortalIcon name="arrow_forward" className="text-[15px]" />
+          </button>
+        </div>
+
+        {/* Bottom Row: Leaderboard + Priority Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-4">
+          {/* Faculty Leaderboard */}
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5">
+            <div className="flex items-start justify-between mb-1">
+              <div>
+                <h3 className="font-title-md text-title-md text-on-surface flex items-center gap-1.5">
+                  <PortalIcon
+                    name="emoji_events"
+                    className="text-[18px] text-[#E89B15]"
+                  />
+                  Faculty Leaderboard
+                </h3>
+                <p className="text-xs text-on-surface-variant mt-0.5 mb-4">
+                  Based on recent graduate placement rates
+                </p>
+              </div>
+              <PortalIcon
+                name="more_vert"
+                className="text-[18px] text-on-surface-variant cursor-pointer"
+              />
+            </div>
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-outline-variant/20">
+                  <th className="pb-2 text-xs font-bold text-on-surface-variant w-8" />
+                  <th className="pb-2 text-xs font-bold text-on-surface-variant">
+                    Department
+                  </th>
+                  <th className="pb-2 text-xs font-bold text-on-surface-variant">
+                    Placement Rate
+                  </th>
+                  <th className="pb-2 text-xs font-bold text-on-surface-variant">
+                    Avg. Starting Salary
+                  </th>
+                  <th className="pb-2 text-xs font-bold text-on-surface-variant">
+                    Trend
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {
+                    abbr: "CS",
+                    color: "bg-primary-fixed text-primary",
+                    dept: "Computer Science",
+                    rate: 96,
+                    salary: "$92,000",
+                    trend: "Stable",
+                    trendUp: true,
+                    barColor: "bg-primary",
+                  },
+                  {
+                    abbr: "EN",
+                    color: "bg-[#E1F5EE] text-[#0F6E56]",
+                    dept: "Engineering",
+                    rate: 91,
+                    salary: "$85,500",
+                    trend: "Up 2%",
+                    trendUp: true,
+                    barColor: "bg-[#1D9E75]",
+                  },
+                  {
+                    abbr: "BU",
+                    color: "bg-surface-container text-on-surface-variant",
+                    dept: "Business Admin",
+                    rate: 84,
+                    salary: "$68,000",
+                    trend: "Flat",
+                    trendUp: null,
+                    barColor: "bg-outline-variant",
+                  },
+                ].map((row) => (
+                  <tr
+                    key={row.dept}
+                    className="border-b border-outline-variant/10 last:border-none"
+                  >
+                    <td className="py-3 pr-3">
+                      <div
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold ${row.color}`}
+                      >
+                        {row.abbr}
+                      </div>
+                    </td>
+                    <td className="py-3 font-body-md text-body-md text-on-surface font-bold">
+                      {row.dept}
+                    </td>
+                    <td className="py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-20 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                          <div
+                            className={`h-full ${row.barColor} rounded-full`}
+                            style={{ width: `${row.rate}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-on-surface-variant">
+                          {row.rate}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3 font-mono-numbers text-sm text-on-surface">
+                      {row.salary}
+                    </td>
+                    <td className="py-3">
+                      <span
+                        className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                          row.trendUp === true
+                            ? "bg-[#EAF3DE] text-[#27500A]"
+                            : row.trendUp === false
+                              ? "bg-[#FCEBEB] text-[#791F1F]"
+                              : "bg-surface-container text-on-surface-variant"
+                        }`}
+                      >
+                        {row.trendUp === true && (
+                          <PortalIcon
+                            name="trending_up"
+                            className="text-[12px]"
+                          />
+                        )}
+                        {row.trendUp === false && (
+                          <PortalIcon
+                            name="trending_down"
+                            className="text-[12px]"
+                          />
+                        )}
+                        {row.trend}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Priority Actions */}
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5">
+            <h3 className="font-title-md text-title-md text-on-surface flex items-center gap-1.5 mb-4">
+              <PortalIcon name="bolt" className="text-[18px] text-[#E89B15]" />
+              Priority Actions
+            </h3>
+            <div className="flex flex-col divide-y divide-outline-variant/20">
+              {[
+                {
+                  icon: "warning",
+                  iconBg: "bg-[#FAEEDA]",
+                  iconColor: "text-[#854F0B]",
+                  title: "Review 3 Flagged Courses",
+                  desc: "Alignment scores dropped below 70% threshold in Arts division.",
+                  action: "Take Action",
+                },
+                {
+                  icon: "business",
+                  iconBg: "bg-primary-fixed",
+                  iconColor: "text-primary",
+                  title: "Approve 5 New Employers",
+                  desc: "Pending partner requests requiring final institutional sign-off.",
+                  action: "Review Queue",
+                },
+                {
+                  icon: "description",
+                  iconBg: "bg-[#E1F5EE]",
+                  iconColor: "text-[#0F6E56]",
+                  title: "Publish Fall Report",
+                  desc: "Draft is 90% complete. Awaiting final review from the provost.",
+                  action: "Open Draft",
+                },
+              ].map((item) => (
+                <div key={item.title} className="py-3 first:pt-0 last:pb-0">
+                  <div className="flex items-start gap-2.5 mb-1">
+                    <div
+                      className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5 ${item.iconBg}`}
+                    >
+                      <PortalIcon
+                        name={item.icon}
+                        className={`text-[14px] ${item.iconColor}`}
+                      />
+                    </div>
+                    <p className="text-sm font-bold text-on-surface leading-snug">
+                      {item.title}
+                    </p>
+                  </div>
+                  <p className="text-xs text-on-surface-variant leading-relaxed ml-[34px] mb-1.5">
+                    {item.desc}
+                  </p>
+                  <button
+                    type="button"
+                    className="ml-[34px] text-xs font-bold text-secondary flex items-center gap-1 hover:underline"
+                  >
+                    {item.action}
+                    <PortalIcon name="arrow_forward" className="text-[12px]" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 export function WelcomePortal() {
   return (
     <div className="bg-surface text-on-surface min-h-screen flex flex-col">
@@ -1301,9 +1619,308 @@ export function WelcomePortal() {
       </main>
       <footer className="w-full py-8 mt-auto bg-surface-container-low text-center">
         <div className="max-w-container-max mx-auto text-on-surface-variant text-body-md">
-          © 2024 CareerBridge+. AI-Powered Recruitment Intelligence.
+          © 2026 CareerBridge+. AI-Powered Recruitment Intelligence.
         </div>
       </footer>
+    </div>
+  );
+}
+
+export function CurriculumIntel() {
+  const HEATMAP_COLS = ["React", "Node.js", "Docker", "AWS", "SQL", "Python", "UI/UX", "Agile"];
+
+  const HEATMAP_ROWS = [
+    {
+      faculty: "Computer Science",
+      scores: [85, 32, 90, 65, 41, 78, 8],
+    },
+    {
+      faculty: "Engineering",
+      scores: [55, 18, 72, 69, 38, 25, 5],
+    },
+    {
+      faculty: "Business",
+      scores: [22, 68, 54, 30, 18, 75, 9],
+    },
+    {
+      faculty: "Design & Arts",
+      scores: [10, 45, 48, 15, 88, 95, 6],
+    },
+    {
+      faculty: "Information Tech.",
+      scores: [88, 55, 82, 90, 65, 70, 3],
+    },
+    {
+      faculty: "Health Sciences",
+      scores: [12, 75, 38, 28, 85, 15, 2],
+    },
+  ];
+
+  const RECOMMENDATIONS = [
+    {
+      priority: "Critical Priority",
+      priorityColor: "bg-[#FCEBEB] text-[#791F1F]",
+      dept: "Comp Sci",
+      title: "Cloud Architecture Fundamentals",
+      current: "Basic Networking, On...",
+      recommended: "AWS Core...",
+      borderColor: "border-l-[#E24B4A]",
+    },
+    {
+      priority: "Critical Priority",
+      priorityColor: "bg-[#FCEBEB] text-[#791F1F]",
+      dept: "Engineering",
+      title: "Applied MLOps & Deployment",
+      current: "Theory of ML, Jupyter...",
+      recommended: "Docker, CI/CD for ML...",
+      borderColor: "border-l-[#E24B4A]",
+    },
+    {
+      priority: "High Priority",
+      priorityColor: "bg-[#FAEEDA] text-[#633806]",
+      dept: "Information Tech.",
+      title: "Modern Backend Development",
+      current: "Java SE, Monoliths...",
+      recommended: "Node.js, Go, RESTful API...",
+      borderColor: "border-l-[#BA7517]",
+    },
+    {
+      priority: "High Priority",
+      priorityColor: "bg-[#FAEEDA] text-[#633806]",
+      dept: "Business",
+      title: "Agile & Product Management",
+      current: "Waterfall, Basic Projec...",
+      recommended: "Scrum, Jira, User Storie...",
+      borderColor: "border-l-[#BA7517]",
+    },
+    {
+      priority: "Medium Priority",
+      priorityColor: "bg-[#EEEDFE] text-[#3C3489]",
+      dept: "Comp Sci",
+      title: "DevOps Practices",
+      current: "Version Control (Git)",
+      recommended: "Terraform, GitHub...",
+      borderColor: "border-l-[#534AB7]",
+    },
+  ];
+
+  function getHeatColor(score: number) {
+    if (score >= 80) return "bg-primary text-on-primary";
+    if (score >= 60) return "bg-secondary text-on-primary";
+    if (score >= 40) return "bg-[#EEEDFE] text-[#26215C]";
+    if (score >= 20) return "bg-[#FAEEDA] text-[#633806]";
+    return "bg-[#FCEBEB] text-[#791F1F]";
+  }
+
+  return (
+    <div className="flex-1 md:ml-sidebar-width flex flex-col min-h-screen bg-background">
+      {/* Top bar */}
+      <header className="sticky top-0 z-30 flex justify-end items-center h-14 px-6 bg-background/90 backdrop-blur-md border-b border-outline-variant/10 gap-3">
+        <button
+          type="button"
+          className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors relative"
+          aria-label="Notifications"
+        >
+          <PortalIcon name="notifications" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full" />
+        </button>
+        <button
+          type="button"
+          className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          aria-label="Dark mode"
+        >
+          <PortalIcon name="dark_mode" />
+        </button>
+        <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-lg text-label-lg font-bold">
+          DR
+        </div>
+      </header>
+
+      <main className="flex-1 p-6 max-w-container-max mx-auto w-full flex flex-col gap-5">
+        {/* Hero Banner */}
+        <div className="rounded-xl bg-[#26215C] px-6 py-5 flex items-center justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[11px] font-bold text-[#ccbeff] bg-white/10 px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                <PortalIcon name="auto_awesome" className="text-[13px]" />
+                AI-Powered
+              </span>
+            </div>
+            <h2 className="text-[22px] font-bold text-white leading-tight mb-1">
+              Curriculum Intelligence &amp; Gap Analysis
+            </h2>
+            <p className="text-sm text-white/70 max-w-md leading-relaxed">
+              Real-time mapping of institutional curricula against emerging industry skill demands.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="flex items-center gap-2 bg-white text-[#26215C] text-sm font-bold px-5 py-2.5 rounded-full whitespace-nowrap hover:bg-white/90 transition-colors shrink-0"
+          >
+            Generate Report
+          </button>
+        </div>
+
+        {/* Main Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
+          {/* Left: Skill Gap Heatmap */}
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-title-md text-title-md text-on-surface font-bold">
+                  Skill Gap Heatmap
+                </h3>
+                <p className="text-xs text-on-surface-variant mt-0.5">
+                  Coverage vs. Industry Demand (Score 0–100)
+                </p>
+              </div>
+              <PortalIcon name="more_horiz" className="text-[18px] text-on-surface-variant cursor-pointer" />
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left min-w-[560px]">
+                <thead>
+                  <tr className="border-b border-outline-variant/20">
+                    <th className="pb-2 text-xs font-bold text-on-surface-variant pr-4 w-36">
+                      Faculty / Skill Area
+                    </th>
+                    {HEATMAP_COLS.map((col) => (
+                      <th
+                        key={col}
+                        className="pb-2 text-[10px] font-bold text-on-surface-variant text-center px-1 whitespace-nowrap"
+                        style={{ writingMode: "vertical-lr", transform: "rotate(180deg)", height: 60 }}
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {HEATMAP_ROWS.map((row) => (
+                    <tr key={row.faculty} className="border-b border-outline-variant/10 last:border-none">
+                      <td className="py-2.5 pr-4 text-xs font-bold text-on-surface whitespace-nowrap">
+                        {row.faculty}
+                      </td>
+                      {row.scores.map((score, i) => (
+                        <td key={i} className="py-2.5 px-1 text-center">
+                          <span
+                            className={`inline-flex items-center justify-center w-8 h-7 rounded-md text-[11px] font-bold ${getHeatColor(score)}`}
+                          >
+                            {score}
+                          </span>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Legend */}
+            <div className="flex items-center gap-4 pt-1 flex-wrap">
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-sm bg-[#FCEBEB]" />
+                <span className="text-[10px] text-on-surface-variant">Critical Gap (&lt;40)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-sm bg-[#EEEDFE]" />
+                <span className="text-[10px] text-on-surface-variant">Developing (40–70)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-sm bg-primary" />
+                <span className="text-[10px] text-on-surface-variant">Covered (&gt;70)</span>
+              </div>
+            </div>
+
+            {/* Live Demand Bar */}
+            <div className="border-t border-outline-variant/20 pt-3 flex items-center gap-4 text-xs text-on-surface-variant flex-wrap">
+              <span className="flex items-center gap-1.5 font-bold text-secondary">
+                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                LIVE DEMAND
+              </span>
+              <span className="flex items-center gap-1">
+                <PortalIcon name="trending_up" className="text-[14px] text-[#27500A]" />
+                React <span className="text-[#27500A] font-bold ml-0.5">+34% Q2</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <PortalIcon name="trending_up" className="text-[14px] text-[#27500A]" />
+                Python (Data Eng.) <span className="text-[#27500A] font-bold ml-0.5">+27% Q2</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <PortalIcon name="trending_up" className="text-[14px] text-[#27500A]" />
+                Ku...
+              </span>
+            </div>
+          </div>
+
+          {/* Right: AI Course Recommendations */}
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-title-md text-title-md text-on-surface font-bold">
+                AI Course Recommendations
+              </h3>
+              <button
+                type="button"
+                className="text-xs font-bold text-secondary hover:underline"
+              >
+                View All
+              </button>
+            </div>
+            <p className="text-xs text-on-surface-variant -mt-2">
+              Prioritised by gap severity &amp; employer demand
+            </p>
+
+            <div className="flex flex-col gap-3">
+              {RECOMMENDATIONS.map((rec) => (
+                <div
+                  key={rec.title}
+                  className={`bg-white rounded-xl border border-outline-variant/20 border-l-4 ${rec.borderColor} p-4`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${rec.priorityColor}`}
+                    >
+                      {rec.priority}
+                    </span>
+                    <span className="text-[10px] text-on-surface-variant font-bold">
+                      {rec.dept}
+                    </span>
+                  </div>
+                  <h4 className="font-bold text-sm text-on-surface mb-2 leading-snug">
+                    {rec.title}
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-surface-container rounded-lg p-2">
+                      <p className="text-[9px] font-bold text-on-surface-variant uppercase mb-1">
+                        Current Skills
+                      </p>
+                      <p className="text-[11px] text-on-surface truncate">{rec.current}</p>
+                    </div>
+                    <div className="bg-primary-fixed rounded-lg p-2">
+                      <p className="text-[9px] font-bold text-primary uppercase mb-1">
+                        Recommended Additions
+                      </p>
+                      <p className="text-[11px] text-primary font-bold truncate">{rec.recommended}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* AI Insights FAB */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:bottom-6 md:right-8">
+        <button
+          type="button"
+          className="flex items-center gap-2 bg-[#26215C] hover:bg-[#534AB7] text-white text-sm font-bold px-5 py-3 rounded-full shadow-lg transition-colors"
+        >
+          <PortalIcon name="auto_awesome" className="text-[16px]" />
+          AI Insights
+        </button>
+      </div>
     </div>
   );
 }
@@ -2882,70 +3499,6 @@ export function ArchivePage() {
   );
 }
 
-export function UniversityDashboard() {
-  return (
-    <div className="flex-1 ml-sidebar-width min-h-screen flex flex-col pt-20 px-8">
-      <main className="max-w-container-max mx-auto w-full">
-        <div className="mb-8 rounded-xl bg-gradient-primary-c p-8 text-on-primary relative overflow-hidden">
-          <h1 className="font-display-lg text-display-lg mb-2">
-            Welcome back, Dean Roberts.
-          </h1>
-          <p className="text-body-lg opacity-90 max-w-2xl">
-            Your institutional health overview is ready. We've identified 3 new
-            curriculum gaps.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {[
-            { label: "Placements", val: "3,492", icon: "school" },
-            { label: "Employer Engage", val: "94/100", icon: "handshake" },
-            { label: "Curriculum Align", val: "88%", icon: "target" },
-            { label: "Active Vacancies", val: "1,204", icon: "work" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-surface-container-lowest rounded-xl p-6 shadow-card-soft border hover:-translate-y-1 transition-all"
-            >
-              <div className="w-10 h-10 rounded-lg bg-primary-container/20 text-primary flex items-center justify-center mb-4">
-                <PortalIcon name={stat.icon} />
-              </div>
-              <p className="text-label-lg text-on-surface-variant">
-                {stat.label}
-              </p>
-              <h3 className="text-headline-lg font-bold">{stat.val}</h3>
-            </div>
-          ))}
-        </div>
-        <div className="bg-surface-container-lowest rounded-xl border p-6">
-          <h3 className="text-title-lg mb-6">Faculty Leaderboard</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b text-label-lg text-on-surface-variant">
-                  <th className="py-4">Department</th>
-                  <th className="py-4">Placement Rate</th>
-                  <th className="py-4">Starting Salary</th>
-                </tr>
-              </thead>
-              <tbody className="text-body-md">
-                <tr className="border-b hover:bg-surface-container-low transition-colors">
-                  <td className="py-4 font-bold">Computer Science</td>
-                  <td className="py-4">96%</td>
-                  <td className="py-4 font-mono-data">$92,000</td>
-                </tr>
-                <tr className="border-b hover:bg-surface-container-low transition-colors">
-                  <td className="py-4 font-bold">Engineering</td>
-                  <td className="py-4">91%</td>
-                  <td className="py-4 font-mono-data">$85,500</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
 
 const MOCK_STUDENTS = [
   {
@@ -3079,6 +3632,8 @@ const MOCK_STUDENTS = [
     missing: ["AWS"],
   },
 ];
+
+
 
 export function StudentTalentPoolPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -3452,68 +4007,7 @@ export function StudentTalentPoolPage() {
   );
 }
 
-export function CurriculumIntel() {
-  return (
-    <div className="ml-sidebar-width pt-20 px-8 flex-1">
-      <div className="max-w-container-max mx-auto">
-        <div className="w-full rounded-2xl bg-gradient-hero-a p-8 mb-8 text-on-primary">
-          <h2 className="text-headline-lg font-bold">
-            Curriculum Intelligence & Gap Analysis
-          </h2>
-          <p className="text-body-lg mt-1">
-            Real-time mapping of institutional curricula against industry
-            demands.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-3xl border shadow-sm p-6">
-            <h3 className="text-title-md mb-4">Skill Gap Heatmap</h3>
-            <div className="grid grid-cols-4 gap-2 text-center text-label-sm">
-              <div className="bg-primary text-white p-4 rounded">
-                CS: AI Ethics (32)
-              </div>
-              <div className="bg-secondary text-white p-4 rounded">
-                ENG: Cloud (55)
-              </div>
-              <div className="bg-surface-container p-4 rounded">
-                BUS: Agile (92)
-              </div>
-              <div className="bg-primary text-white p-4 rounded">
-                ART: Web3 (10)
-              </div>
-            </div>
-          </div>
-          <div className="bg-surface-container-low rounded-3xl border p-6">
-            <h3 className="text-title-md mb-4 flex items-center gap-2">
-              <PortalIcon name="model_training" className="text-secondary" /> AI
-              Course Recommendations
-            </h3>
-            <div className="space-y-4">
-              <div className="p-4 bg-white rounded-xl border-l-4 border-error">
-                <p className="text-label-sm font-bold text-error uppercase">
-                  Critical Priority
-                </p>
-                <h4 className="font-bold">Cloud Architecture Fundamentals</h4>
-                <p className="text-body-md text-on-surface-variant">
-                  Recommended: AWS Core, Serverless
-                </p>
-              </div>
-              <div className="p-4 bg-white rounded-xl border-l-4 border-secondary">
-                <p className="text-label-sm font-bold text-secondary uppercase">
-                  High Priority
-                </p>
-                <h4 className="font-bold">Modern Backend Development</h4>
-                <p className="text-body-md text-on-surface-variant">
-                  Recommended: Node.js, Go
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 const STUDENT_PROFILE_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuBW22ZzLzBxfPNQsDn2L32lwKW-p2LICQqS3G00Cl7cxsTER_n8oUlWgNYEOC0NrvQCQxkZosrDbRJZ2HS1yDYMUn3rq6cb1BObHfGPt0hXEHtYdQA5F6mQa7x44QlGSpOBIQf1MuhQ2MmkO5CQ5eBC7WtYGc3e-JsW8XEOpguaOEF2b71VS0lr8EM6-pZbyTvyBj7Uv3vHxDDGv0Y0-r4bIZ_k5H2a3pDHt92TkD6T_GQF6H5Cm-YTiRgXWccmmqVmPy-uVvoYS8o";
@@ -3993,6 +4487,392 @@ export function SkillGapsPage() {
           <PortalIcon name="arrow_forward" className="text-[16px]" />
         </Link>
       </div>
+    </div>
+  );
+}
+
+const READINESS_STUDENTS = [
+  {
+    id: 1,
+    name: "Sarah Tan",
+    studentId: "ID: 184829",
+    faculty: "Computer Science",
+    year: "Year 3",
+    techReadiness: 92,
+    softSkills: 88,
+    initials: "ST",
+    color: "bg-primary text-on-primary",
+    verified: ["Python", "React", "Data Structures", "Agile", "Communication"],
+    extraCount: 4,
+    matches: [
+      { company: "FinTech Corp", role: "Frontend Developer Intern", match: 94, color: "bg-[#EEEDFE] text-primary" },
+      { company: "Stark Industries", role: "Junior Software Engineer", match: 89, color: "bg-[#E1F5EE] text-[#0F6E56]" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Danial Razif",
+    studentId: "ID: 184910",
+    faculty: "Information Systems",
+    year: "Year 4",
+    techReadiness: 85,
+    softSkills: 90,
+    initials: "DR",
+    color: "bg-surface-container text-on-surface-variant",
+    verified: ["SQL", "Python", "Java", "Scrum"],
+    extraCount: 2,
+    matches: [
+      { company: "Maybank", role: "Data Analyst Intern", match: 91, color: "bg-[#EEEDFE] text-primary" },
+    ],
+  },
+  {
+    id: 3,
+    name: "Priya Sharma",
+    studentId: "ID: 185882",
+    faculty: "Data Science",
+    year: "Year 2",
+    techReadiness: 76,
+    softSkills: 82,
+    initials: "PS",
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBW22ZzLzBxfPNQsDn2L32lwKW-p2LICQqS3G00Cl7cxsTER_n8oUlWgNYEOC0NrvQCQxkZosrDbRJZ2HS1yDYMUn3rq6cb1BObHfGPt0hXEHtYdQA5F6mQa7x44QlGSpOBIQf1MuhQ2MmkO5CQ5eBC7WtYGc3e-JsW8XEOpguaOEF2b71VS0lr8EM6-pZbyTvyBj7Uv3vHxDDGv0Y0-r4bIZ_k5H2a3pDHt92TkD6T_GQF6H5Cm-YTiRgXWccmmqVmPy-uVvoYS8o",
+    color: "",
+    verified: ["Python", "R", "Statistics"],
+    extraCount: 1,
+    matches: [
+      { company: "Petronas Digital", role: "Data Science Intern", match: 82, color: "bg-[#EEEDFE] text-primary" },
+    ],
+  },
+] as const;
+
+export function ReadinessCircle({ value, label }: { value: number; label: string }) {
+  const size = 72;
+  const stroke = 7;
+  const r = size / 2 - stroke / 2;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (value / 100) * circ;
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="-rotate-90">
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#EEEDFE" strokeWidth={stroke} />
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#534AB7" strokeWidth={stroke}
+            strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="font-mono-numbers text-[16px] font-bold text-[#26215C]">{value}%</span>
+        </div>
+      </div>
+      <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wide">{label}</p>
+    </div>
+  );
+}
+
+export function StudentReadinessPage() {
+  const [selectedStudent, setSelectedStudent] = useState<typeof READINESS_STUDENTS[number] | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [facultyFilter, setFacultyFilter] = useState("Faculty");
+
+  function openDrawer(student: typeof READINESS_STUDENTS[number]) {
+    setSelectedStudent(student);
+    setIsDrawerOpen(true);
+  }
+
+  function closeDrawer() {
+    setIsDrawerOpen(false);
+    setTimeout(() => setSelectedStudent(null), 300);
+  }
+
+  return (
+    <div className="flex-1 md:ml-sidebar-width flex flex-col min-h-screen bg-background">
+      {/* Top bar */}
+      <header className="sticky top-0 z-30 flex justify-end items-center h-14 px-6 bg-background/90 backdrop-blur-md border-b border-outline-variant/10 gap-3">
+        {/* Search bar */}
+        <div className="flex-1 max-w-xs">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-outline-variant/20 text-sm text-on-surface-variant">
+            <PortalIcon name="search" className="text-[16px] shrink-0" />
+            <span className="text-outline">Search students, skills, or programs...</span>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors relative"
+          aria-label="Notifications"
+        >
+          <PortalIcon name="notifications" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full" />
+        </button>
+        <button
+          type="button"
+          className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          aria-label="Dark mode"
+        >
+          <PortalIcon name="dark_mode" />
+        </button>
+        <div className="w-9 h-9 rounded-full bg-primary overflow-hidden">
+          <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW22ZzLzBxfPNQsDn2L32lwKW-p2LICQqS3G00Cl7cxsTER_n8oUlWgNYEOC0NrvQCQxkZosrDbRJZ2HS1yDYMUn3rq6cb1BObHfGPt0hXEHtYdQA5F6mQa7x44QlGSpOBIQf1MuhQ2MmkO5CQ5eBC7WtYGc3e-JsW8XEOpguaOEF2b71VS0lr8EM6-pZbyTvyBj7Uv3vHxDDGv0Y0-r4bIZ_k5H2a3pDHt92TkD6T_GQF6H5Cm-YTiRgXWccmmqVmPy-uVvoYS8o"
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </header>
+
+      <main className="flex-1 p-6 max-w-container-max mx-auto w-full flex flex-col gap-5 pb-12">
+        {/* Page Title */}
+        <div>
+          <h1 className="font-bold text-[22px] text-on-surface">Talent Pool Directory</h1>
+          <p className="text-sm text-on-surface-variant mt-0.5">
+            Explore and match student profiles based on readiness and skill alignment.
+          </p>
+        </div>
+
+        {/* KPI Strip */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
+              Avg Tech Readiness
+            </p>
+            <div className="flex items-end gap-2">
+              <span className="font-mono-numbers text-[24px] font-bold text-on-surface">82.4%</span>
+              <span className="text-xs font-bold text-[#27500A] bg-[#EAF3DE] px-1.5 py-0.5 rounded-full mb-0.5">
+                ↑+1.2%
+              </span>
+            </div>
+          </div>
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
+              Avg Soft Skills
+            </p>
+            <div className="flex items-end gap-2">
+              <span className="font-mono-numbers text-[24px] font-bold text-on-surface">78.1%</span>
+              <span className="text-xs font-bold text-[#791F1F] bg-[#FCEBEB] px-1.5 py-0.5 rounded-full mb-0.5">
+                ↓+0.5%
+              </span>
+            </div>
+          </div>
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">
+              Top Employer Match
+            </p>
+            <div className="flex items-end gap-2">
+              <span className="font-mono-numbers text-[24px] font-bold text-on-surface truncate">TechCo...</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-1 max-w-sm px-4 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/20 text-sm text-outline">
+            <PortalIcon name="filter_list" className="text-[16px] text-on-surface-variant" />
+            Filter by name, ID...
+          </div>
+          <select
+            value={facultyFilter}
+            onChange={(e) => setFacultyFilter(e.target.value)}
+            className="px-4 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/20 text-sm text-on-surface font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-secondary/30"
+          >
+            <option>Faculty</option>
+            <option>Computer Science</option>
+            <option>Information Systems</option>
+            <option>Data Science</option>
+            <option>Engineering</option>
+          </select>
+        </div>
+
+        {/* Table */}
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-outline-variant/20 bg-surface-container/40">
+                <th className="py-3 px-5 text-[10px] font-bold text-on-surface-variant uppercase tracking-wide">Student</th>
+                <th className="py-3 px-5 text-[10px] font-bold text-on-surface-variant uppercase tracking-wide">Faculty &amp; Year</th>
+                <th className="py-3 px-5 text-[10px] font-bold text-on-surface-variant uppercase tracking-wide">Tech Readiness</th>
+                <th className="py-3 px-5 text-[10px] font-bold text-on-surface-variant uppercase tracking-wide">Soft Skills</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-outline-variant/10">
+              {READINESS_STUDENTS.map((student) => {
+                const isSelected = selectedStudent?.id === student.id && isDrawerOpen;
+                return (
+                  <tr
+                    key={student.id}
+                    onClick={() => openDrawer(student)}
+                    className={`cursor-pointer transition-colors hover:bg-surface-container/30 ${isSelected ? "bg-primary-fixed/30 border-l-2 border-primary" : ""}`}
+                  >
+                    <td className="py-3 px-5">
+                      <div className="flex items-center gap-3">
+                        {(student as any).img ? (
+                          <img
+                            src={(student as any).img}
+                            alt={student.name}
+                            className="w-9 h-9 rounded-full object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${student.color}`}>
+                            {student.initials}
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-sm font-bold text-on-surface">{student.name}</p>
+                          <p className="text-[11px] text-on-surface-variant">{student.studentId}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-5">
+                      <p className="text-sm text-on-surface">{student.faculty}</p>
+                      <p className="text-[11px] text-on-surface-variant">{student.year}</p>
+                    </td>
+                    <td className="py-3 px-5">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono-numbers text-sm font-bold text-on-surface w-8">{student.techReadiness}%</span>
+                        <div className="w-24 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-primary rounded-full" style={{ width: `${student.techReadiness}%` }} />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-5">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono-numbers text-sm font-bold text-on-surface w-8">{student.softSkills}%</span>
+                        <div className="w-24 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-secondary rounded-full" style={{ width: `${student.softSkills}%` }} />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="px-5 py-3 border-t border-outline-variant/10 text-xs text-on-surface-variant">
+            ... 9 more rows matching table pattern
+          </div>
+        </div>
+
+        <p className="text-xs text-on-surface-variant">Showing 1 to 12 of 3,847</p>
+      </main>
+
+      {/* Drawer Overlay */}
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 z-40"
+          onClick={closeDrawer}
+          role="presentation"
+        />
+      )}
+
+      {/* Profile Drawer */}
+      {selectedStudent && (
+        <div
+          className={`fixed right-0 top-0 h-screen w-full sm:w-[340px] bg-background shadow-xl z-50 flex flex-col transition-transform duration-300 ${
+            isDrawerOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-outline-variant/20">
+            <div className="flex items-center gap-3">
+              {(selectedStudent as any).img ? (
+                <img
+                  src={(selectedStudent as any).img}
+                  alt={selectedStudent.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${selectedStudent.color}`}>
+                  {selectedStudent.initials}
+                </div>
+              )}
+              <div>
+                <p className="font-bold text-sm text-on-surface">{selectedStudent.name}</p>
+                <p className="text-xs text-on-surface-variant">{selectedStudent.faculty} · {selectedStudent.year}</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={closeDrawer}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors"
+            >
+              <PortalIcon name="close" className="text-[18px]" />
+            </button>
+          </div>
+
+          {/* Drawer Content */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-5">
+            {/* Readiness Overview */}
+            <div>
+              <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">
+                Readiness Overview
+              </p>
+              <div className="flex items-center justify-around">
+                <ReadinessCircle value={selectedStudent.techReadiness} label="Technical" />
+                <ReadinessCircle value={selectedStudent.softSkills} label="Soft Skills" />
+              </div>
+            </div>
+
+            {/* Verified Skills */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <PortalIcon name="verified" className="text-[16px] text-secondary" />
+                <p className="text-sm font-bold text-on-surface">Verified Skills</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {selectedStudent.verified.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-3 py-1 rounded-full bg-primary-fixed text-primary text-[11px] font-bold"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {selectedStudent.extraCount > 0 && (
+                  <span className="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-bold">
+                    + {selectedStudent.extraCount} more
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Top Career Matches */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <PortalIcon name="work" className="text-[16px] text-secondary" />
+                <p className="text-sm font-bold text-on-surface">Top Career Matches</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {selectedStudent.matches.map((match) => (
+                  <div
+                    key={match.company}
+                    className="flex items-center justify-between p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold ${match.color}`}>
+                        {match.company.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-on-surface">{match.company}</p>
+                        <p className="text-[10px] text-on-surface-variant">{match.role}</p>
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-bold text-primary bg-primary-fixed px-2.5 py-1 rounded-full whitespace-nowrap">
+                      {match.match}% Match
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Export Button */}
+          <div className="p-5 border-t border-outline-variant/10">
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-2 bg-[#26215C] hover:bg-[#534AB7] text-white text-sm font-bold py-3 rounded-full transition-colors"
+            >
+              Export Full Report
+              <PortalIcon name="download" className="text-[16px]" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
